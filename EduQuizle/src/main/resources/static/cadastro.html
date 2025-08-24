@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>EduQuizle — Cadastro</title>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<header class="topbar" role="banner">
+  <div class="container">
+    <a class="brand" href="index.html" aria-label="EduQuizle">
+      <img src="Imagens/logo%20projeto.png" alt="EduQuizle">
+    </a>
+    <nav class="social" aria-label="Redes sociais">
+      <a aria-label="GitHub" href="#"><span></span></a>
+      <a aria-label="LinkedIn" href="#"><span></span></a>
+    </nav>
+  </div>
+</header>
+
+<main class="stage" role="main">
+  <form class="menu" action="/cadastro" method="post" autocomplete="on">
+    <h1>Cadastro</h1>
+
+    <p id="msg" class="helper" aria-live="polite"></p>
+
+    <label>
+      <span>Nome completo</span>
+      <input type="text" name="nome" id="nome" placeholder="Seu nome completo" required>
+    </label>
+
+    <label>
+      <span>Login</span>
+      <input type="text" name="login" id="login" placeholder="Crie seu Login" required>
+    </label>
+
+    <label>
+      <span>E-mail</span>
+      <input type="email" name="email" id="email" placeholder="voce@exemplo.com" required>
+    </label>
+
+    <label>
+      <span>Senha</span>
+      <input type="password" name="senha" id="senha" placeholder="••••••••" required>
+    </label>
+
+    <label>
+      <span>Confirmar Senha</span>
+      <input type="password" name="confirma_senha" id="confirma_senha" placeholder="Repita sua senha" required>
+    </label>
+
+    <label class="checkbox">
+      <input type="checkbox" name="termos" id="termos" required>
+      <span>Li e aceito as <a href="politica.html">Políticas de privacidade</a></span>
+    </label>
+
+    <button type="submit">Cadastrar</button>
+  </form>
+</main>
+
+<footer class="foot" role="contentinfo">
+  <div class="foot-wrap">
+    <span>© <span id="y"></span> EduQuizle</span>
+    <nav class="foot-links">
+      <a href="politica.html">Política de Privacidade</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('y').textContent = new Date().getFullYear();
+
+  const p = new URLSearchParams(location.search);
+  const msg = document.getElementById('msg');
+
+  if (p.has('erro')) {
+    msg.style.color = 'red';
+    msg.textContent = decodeURIComponent(p.get('erro'));
+  }
+  if (p.has('ok')) {
+    msg.style.color = 'green';
+    msg.textContent = decodeURIComponent(p.get('ok'));
+  }
+  const safeFields = ['nome','login','email'];
+  safeFields.forEach(f => {
+    if (p.has(f)) {
+      const el = document.getElementById(f);
+      if (el) el.value = p.get(f);
+    }
+  });
+</script>
+</body>
+</html>

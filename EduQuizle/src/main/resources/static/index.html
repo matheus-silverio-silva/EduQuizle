@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>EduQuizle — Login</title>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+  <header class="topbar" role="banner">
+    <div class="container">
+      <a class="brand" href="#" aria-label="EduQuizle">
+        <img src="Imagens/logo%20projeto.png" alt="EduQuizle">
+      </a>
+      <nav class="social" aria-label="Redes sociais">
+        <a aria-label="GitHub" href="#"><span></span></a>
+        <a aria-label="LinkedIn" href="#"><span></span></a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="stage" role="main">
+    <form class="menu" autocomplete="on">
+      <h1>Login</h1>
+
+      <label>
+        <span>Usuário</span>
+        <input type="text" name="usuario" placeholder="Seu usuário" required>
+      </label>
+
+      <label>
+        <span>E-mail</span>
+        <input type="email" name="email" placeholder="voce@exemplo.com" required>
+      </label>
+
+      <label>
+        <span>Senha</span>
+        <input type="password" name="senha" placeholder="••••••••" required>
+      </label>
+
+      <button type="submit">Entrar</button>
+
+      <p class="helper">
+        Não possui cadastro?
+        <a href="cadastro.html">Crie seu cadastro aqui</a>
+      </p>
+    </form>
+  </main>
+
+  <footer class="foot" role="contentinfo">
+    <div class="foot-wrap">
+      <span>© <span id="y"></span> EduQuizle</span>
+      <nav class="foot-links">
+        <a href="politica.html">Política de Privacidade</a>
+      </nav>
+    </div>
+  </footer>
+  <script>
+    document.getElementById('y').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
