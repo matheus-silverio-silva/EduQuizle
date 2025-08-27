@@ -27,27 +27,46 @@ public class CadastroServlet extends HttpServlet {
             throws ServletException, IOException {
 
         request.setCharacterEncoding("UTF-8");
+        request.getParameterMap().forEach((k, v) ->
+                System.out.println("param " + k + " = " + java.util.Arrays.toString(v)));
 
-        String nome  = request.getParameter("nome");
-        String login = request.getParameter("login");
-        String email = request.getParameter("email");
-        String senha = request.getParameter("senha");
+        String nome  = get(request, "nome");
+        String login = get(request, "login");
+        String email = get(request, "email");
+        String senha = get(request, "senha");
+        String confirma = get(request, "confirma_senha");
+        boolean termos = request.getParameter("termos") != null;
 
         try {
-            Usuario u = new Usuario(login, nome, email, senha);
+            if (!termos) throw new IllegalArgumentException("É preciso aceitar os termos.");
+            if (!senha.equals(confirma)) throw new IllegalArgumentException("Senhas não conferem.");
+
+            Usuario u = new Usuario();
+            u.setLogin(login);
+            u.setNome(nome);
+            u.setEmail(email);
+            u.setSenha(senha);
             Long idGerado = usuarioService.registrarUsuario(u);
 
-            String ok = URLEncoder.encode("cadastrado", StandardCharsets.UTF_8);
-            String url = request.getContextPath() + "/index.html?ok=" + ok + "&id=" + idGerado;
-            response.sendRedirect(url);
+            String ok = java.net.URLEncoder.encode("cadastrado", java.nio.charset.StandardCharsets.UTF_8);
+            response.sendRedirect(request.getContextPath()+"/index.html?ok="+ok+"&id="+idGerado);
 
         } catch (IllegalArgumentException e) {
-            String err = URLEncoder.encode(e.getMessage(), StandardCharsets.UTF_8);
-            response.sendRedirect(request.getContextPath() + "/cadastro.html?erro=" + err);
+            String err = java.net.URLEncoder.encode(e.getMessage(), java.nio.charset.StandardCharsets.UTF_8);
+            String qs = "erro="+err+"&nome="+url(nome)+"&login="+url(login)+"&email="+url(email);
+            response.sendRedirect(request.getContextPath()+"/cadastro.html?"+qs);
 
         } catch (Exception e) {
-            String err = URLEncoder.encode("interno", StandardCharsets.UTF_8);
-            response.sendRedirect(request.getContextPath() + "/cadastro.html?erro=" + err);
+            String err = java.net.URLEncoder.encode("interno", java.nio.charset.StandardCharsets.UTF_8);
+            response.sendRedirect(request.getContextPath()+"/cadastro.html?erro="+err);
         }
+    }
+
+    private static String get(HttpServletRequest req, String name){
+        String v = req.getParameter(name);
+        return v == null ? "" : v.trim();
+    }
+    private static String url(String s){
+        return java.net.URLEncoder.encode(s == null ? "" : s, java.nio.charset.StandardCharsets.UTF_8);
     }
 }

@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>EduQuizle — Home</title>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css"/>
+</head>
+<body class="is-home">
+<header class="topbar" role="banner">
+  <div class="container">
+    <a class="brand" href="home.html" aria-label="EduQuizle">
+      <img src="Imagens/logo projeto.png" alt="EduQuizle" href="index.html">
+    </a>
+
+    <nav class="social" aria-label="Redes sociais">
+      <a href="#" aria-label="GitHub">GH</a>
+      <a href="#" aria-label="LinkedIn">in</a>
+    </nav>
+  </div>
+</header>
+
+<main class="stage home">
+  <div class="home-grid">
+    <section class="home-hero">
+      <h1 class="home-title">
+        <span>Bem-vindo ao EduQuizle</span>
+        <span id="username" class="home-username"></span>
+      </h1>
+
+      <p class="helper home-helper">
+        <a href="regras.html">Saiba como funciona o <strong>EduQuizle</strong> aqui</a>
+      </p>
+    </section>
+
+    <nav class="home-actions">
+      <a class="home-card" href="desafio-diario.html">Desafio diário</a>
+      <a class="home-card" href="desafio-livre.html">Desafio livre</a>
+      <a class="home-card" href="ranking.html">Ranking</a>
+      <a class="home-card" href="configuracoes.html">Configurações</a>
+    </nav>
+  </div>
+</main>
+
+
+<footer class="foot" role="contentinfo">
+  <div class="foot-wrap">
+    <div class="foot-links">
+      <a href="politica.html">Política de Privacidade</a> ·
+      <a href="termos.html">Termos de Uso</a>
+    </div>
+    <small>© <span id="year"></span> EduQuizle</small>
+  </div>
+</footer>
+
+<script>
+  function getParam(name) {
+    const params = new URLSearchParams(window.location.search);
+    return params.get(name);
+  }
+  const urlName = getParam("nome");
+  const storedName = localStorage.getItem("eduquizle_user");
+  const finalName = urlName || storedName || "Usuário";
+  document.getElementById("username").textContent = finalName;
+  if (urlName) {
+    localStorage.setItem("eduquizle_user", urlName);
+  }
+  document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>

@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>EduQuizle — Regras do Jogo</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css"/>
+    <style>
+        .regras-viewport{
+            position: fixed;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .stage-regras{
+            flex: 1 1 auto;
+            overflow-y: auto;
+            padding: 80px;
+        }
+        .site-footer{
+            position: sticky;
+        }
+    </style>
+</head>
+<body>
+
+<header class="topbar" role="banner">
+    <div class="container">
+        <a class="brand" href="home.html" aria-label="EduQuizle">
+            <img src="Imagens/logo projeto.png" alt="EduQuizle" href="index.html">
+        </a>
+
+        <nav class="social" aria-label="Redes sociais">
+            <a href="#" aria-label="GitHub">GH</a>
+            <a href="#" aria-label="LinkedIn">in</a>
+        </nav>
+    </div>
+</header>
+<div class="regras-viewport">
+    <main class="stage-regras">
+        <div class="container">
+
+            <p class="helper home-helper">
+                <a href="home.html">← Voltar ao início</a>
+            </p>
+
+            <h1 class="home-title">
+                <span>Como funciona o</span>
+                <span><strong>EduQuizle</strong></span>
+            </h1>
+
+            <section>
+                <h2>Objetivo</h2>
+                <p>
+                    Adivinhar o <strong>tema do dia</strong> usando pistas que aparecem a cada tentativa.
+                    Os temas variam entre <strong>Geografia</strong>, <strong>Biologia</strong>,
+                    <strong>História</strong> e <strong>Química</strong>. Quanto menos tentativas, maior a pontuação.
+                </p>
+            </section>
+
+            <section>
+                <h2>Como jogar</h2>
+                <ol>
+                    <li>Digite sua hipótese no campo de resposta (não diferencia maiúsculas/minúsculas/acentos).</li>
+                    <li>Envie e analise as pistas por atributo (exemplos abaixo); as cores indicam proximidade.</li>
+                    <li>Ajuste o palpite e tente novamente até acertar ou acabar as tentativas.</li>
+                </ol>
+            </section>
+
+            <section>
+                <h2>O que significam as cores</h2>
+                <ul>
+                    <li><strong>Verde</strong> — atributo correto.</li>
+                    <li><strong>Amarelo</strong> — parcialmente correto (mesma categoria/valor próximo).</li>
+                    <li><strong>Vermelho</strong> — incorreto.</li>
+                    <li><strong>Vermelho escuro</strong> — muito distante da resposta.</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Pistas por disciplina</h2>
+
+                <h3>Geografia (ex.: País/Capital)</h3>
+                <ul>
+                    <li>Continente, sub-região, capital, idioma principal, moeda, população (≈).</li>
+                    <li>Parcial: mesmo continente/sub-região ou população próxima.</li>
+                </ul>
+
+                <h3>Biologia (ex.: Espécie/Grupo)</h3>
+                <ul>
+                    <li>Reino, filo/divisão, classe, habitat, alimentação, porte (≈).</li>
+                    <li>Parcial: mesma classe ou mesmo habitat, espécie diferente.</li>
+                </ul>
+
+                <h3>História (ex.: Evento/Personalidade)</h3>
+                <ul>
+                    <li>Período/época, século, país/região, tema (revolução/tratado), protagonista.</li>
+                    <li>Parcial: mesmo século ou mesmo país, evento/personagem distinto.</li>
+                </ul>
+
+                <h3>Química (ex.: Elemento)</h3>
+                <ul>
+                    <li>Símbolo, número atômico, grupo/período, família, estado físico (25 °C), massa atômica (≈).</li>
+                    <li>Parcial: mesmo grupo/período; número atômico próximo.</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Modos de jogo</h2>
+                <ul>
+                    <li><strong>Desafio Diário</strong>: 1 desafio por dia, entra no ranking.</li>
+                    <li><strong>Desafio Livre</strong>: jogue à vontade, não afeta o ranking.</li>
+                </ul>
+                <p><strong>Tentativas padrão</strong>: 8 no Diário e 10 no Livre (podem ser ajustadas pela organização).</p>
+            </section>
+
+            <section>
+                <h2>Pontuação e ranking</h2>
+                <ul>
+                    <li>Acerto na 1ª tentativa: +100 pts (decaimento a cada tentativa).</li>
+                    <li>Bônus por sequência diária de acertos.</li>
+                    <li>Empates: menor tempo total decide.</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Boas práticas</h2>
+                <ul>
+                    <li>Sem consulta ao gabarito diário.</li>
+                    <li>Aceitamos variações comuns de escrita (com/sem acento).</li>
+                    <li>Acessível por teclado e leitores de tela (labels descritivos nos campos).</li>
+                </ul>
+            </section>
+        </div>
+    </main>
+<footer class="foot" role="contentinfo">
+    <div class="foot-wrap">
+        <div class="foot-links">
+            <a href="politica.html">Política de Privacidade</a> ·
+            <a href="termos.html">Termos de Uso</a>
+        </div>
+        <small>© <span id="year"></span> EduQuizle</small>
+    </div>
+</footer>
+</div>
+
+</body>
+</html>

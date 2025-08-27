@@ -23,12 +23,10 @@ public class Usuario {
     private String senha;
 
     // Construtor padrão
-    public Usuario(String login, String nome, String email, String senha) {
+    public Usuario() {
     }
 
-    // Construtor com parâmetros
-    public Usuario(Long id, String login, String nome, String email, String senha) {
-        this.id = id;
+    public Usuario(String login, String nome, String email, String senha) {
         this.login = login;
         this.nome = nome;
         this.email = email;

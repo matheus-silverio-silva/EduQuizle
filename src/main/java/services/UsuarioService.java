@@ -3,6 +3,8 @@ package services;
 import entidades.Usuario;
 import repositorios.UsuarioRepository;
 
+import static org.hibernate.internal.util.StringHelper.isBlank;
+
 public class UsuarioService {
 
     private final UsuarioRepository usuarioDAO;
@@ -20,6 +22,11 @@ public class UsuarioService {
         validarUsuario(usuario);
         return usuarioDAO.inserir(usuario);
     }
+    public Usuario autenticar(String login, String senha) {
+        if (isBlank(login) || isBlank(senha)) return null;
+        return usuarioDAO.buscarPorLoginESenha(login.trim(), senha.trim());
+    }
+
     private void validarUsuario(Usuario usuario) {
         if (usuario == null) {
             throw new IllegalArgumentException("Usuário não pode ser nulo.");

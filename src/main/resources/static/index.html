@@ -9,56 +9,61 @@
   <link rel="stylesheet" href="styles.css"/>
 </head>
 <body>
-  <header class="topbar" role="banner">
-    <div class="container">
-      <a class="brand" href="#" aria-label="EduQuizle">
-        <img src="Imagens/logo%20projeto.png" alt="EduQuizle">
-      </a>
-      <nav class="social" aria-label="Redes sociais">
-        <a aria-label="GitHub" href="#"><span></span></a>
-        <a aria-label="LinkedIn" href="#"><span></span></a>
-      </nav>
-    </div>
-  </header>
+<header class="topbar" role="banner">
+  <div class="container">
+    <a class="brand" href="index.html" aria-label="EduQuizle">
+      <img src="Imagens/logo%20projeto.png" alt="EduQuizle">
+    </a>
+    <nav class="social" aria-label="Redes sociais">
+      <a aria-label="GitHub" href="#"><span></span></a>
+      <a aria-label="LinkedIn" href="#"><span></span></a>
+    </nav>
+  </div>
+</header>
 
-  <main class="stage" role="main">
-    <form class="menu" autocomplete="on">
-      <h1>Login</h1>
+<main class="stage" role="main">
+  <form action="/login" method="post" autocomplete="on" class="menu">
+    <h1>Login</h1>
 
-      <label>
-        <span>Usuário</span>
-        <input type="text" name="usuario" placeholder="Seu usuário" required>
-      </label>
+    <p id="msg" aria-live="polite"></p>
 
-      <label>
-        <span>E-mail</span>
-        <input type="email" name="email" placeholder="voce@exemplo.com" required>
-      </label>
+    <label>
+      <span>Login</span>
+      <input type="text" name="login" id="login" required autocomplete="username">
+    </label>
 
-      <label>
-        <span>Senha</span>
-        <input type="password" name="senha" placeholder="••••••••" required>
-      </label>
+    <label>
+      <span>Senha</span>
+      <input type="password" name="senha" id="senha" required autocomplete="current-password">
+    </label>
 
-      <button type="submit">Entrar</button>
+    <button type="submit">Entrar</button>
 
-      <p class="helper">
-        Não possui cadastro?
-        <a href="cadastro.html">Crie seu cadastro aqui</a>
-      </p>
-    </form>
-  </main>
+    <p class="helper">
+      Ainda não possui conta?
+      <a href="cadastro.html">Cadastrar</a>
+    </p>
+  </form>
 
-  <footer class="foot" role="contentinfo">
-    <div class="foot-wrap">
-      <span>© <span id="y"></span> EduQuizle</span>
-      <nav class="foot-links">
-        <a href="politica.html">Política de Privacidade</a>
-      </nav>
-    </div>
-  </footer>
   <script>
-    document.getElementById('y').textContent = new Date().getFullYear();
+    const p = new URLSearchParams(location.search);
+    const msg = document.getElementById('msg');
+    if (p.has('erro')) { msg.style.color = 'red'; msg.textContent = decodeURIComponent(p.get('erro')); }
+    if (p.has('ok'))   { msg.style.color = 'green'; msg.textContent = decodeURIComponent(p.get('ok')); }
+    if (p.has('login')) document.getElementById('login').value = p.get('login');
   </script>
+</main>
+
+<footer class="foot" role="contentinfo">
+  <div class="foot-wrap">
+    <span>© <span id="y"></span> EduQuizle</span>
+    <nav class="foot-links">
+      <a href="politica.html">Política de Privacidade</a>
+    </nav>
+  </div>
+</footer>
+<script>
+  document.getElementById('y').textContent = new Date().getFullYear();
+</script>
 </body>
 </html>
