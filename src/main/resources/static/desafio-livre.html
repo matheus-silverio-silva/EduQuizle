@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>EduQuizle — Home</title>
+  <title>EduQuizle — Desafio Livre</title>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css"/>
@@ -12,9 +12,8 @@
 <header class="topbar" role="banner">
   <div class="container">
     <a class="brand" href="home.html" aria-label="EduQuizle">
-      <img src="Imagens/logo projeto.png" alt="EduQuizle" href="index.html">
+      <img src="Imagens/logo projeto.png" alt="EduQuizle">
     </a>
-
     <nav class="social" aria-label="Redes sociais">
       <a href="#" aria-label="GitHub">GH</a>
       <a href="#" aria-label="LinkedIn">in</a>
@@ -23,50 +22,34 @@
 </header>
 
 <main class="stage home">
-  <div class="home-grid">
+  <div class="home-grid" style="grid-template-columns: 1fr; text-align: center;">
     <section class="home-hero">
       <h1 class="home-title">
-        <span>Bem-vindo ao EduQuizle</span>
-        <span id="username" class="home-username"></span>
+        <span>Desafio Livre</span>
       </h1>
-
-      <p class="helper home-helper">
-        <a href="regras.html">Saiba como funciona o <strong>EduQuizle</strong> aqui</a>
-      </p>
+      <p class="helper home-helper">Escolha uma matéria para começar</p>
     </section>
 
     <nav class="home-actions">
-      <a class="home-card" href="desafio-diario.html">Desafio diário</a>
-      <a class="home-card" href="desafio-livre.html">Desafio livre</a>
-      <a class="home-card" href="ranking.html">Ranking</a>
-      <a class="home-card" href="configuracoes.html">Configurações</a>
+      <a class="home-card" href="jogo.html?materia=geografia">Geografia</a>
+      <a class="home-card" href="jogo.html?materia=historia">História</a>
+      <a class="home-card" href="jogo.html?materia=biologia">Biologia</a>
+      <a class="home-card" href="jogo.html?materia=quimica">Química</a>
     </nav>
   </div>
 </main>
 
-
 <footer class="foot" role="contentinfo">
   <div class="foot-wrap">
-    <span>© <span id="year"></span> EduQuizle</span>
-    <nav class="foot-links">
+    <div class="foot-links">
       <a href="politica.html">Política de Privacidade</a> ·
       <a href="termos.html">Termos de Uso</a>
-    </nav>
+    </div>
+    <small>© <span id="year"></span> EduQuizle</small>
   </div>
 </footer>
 
 <script>
-  function getParam(name) {
-    const params = new URLSearchParams(window.location.search);
-    return params.get(name);
-  }
-  const urlName = getParam("nome");
-  const storedName = localStorage.getItem("eduquizle_user");
-  const finalName = urlName || storedName || "Usuário";
-  document.getElementById("username").textContent = finalName;
-  if (urlName) {
-    localStorage.setItem("eduquizle_user", urlName);
-  }
   document.getElementById('year').textContent = new Date().getFullYear();
 </script>
 </body>

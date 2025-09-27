@@ -333,3 +333,101 @@ body::before{
 @media (max-width:520px){
   .foot .foot-wrap{ flex-direction: column; gap: 4px; }
 }
+
+/* === ESTILOS PARA A PÁGINA DO JOGO === */
+.game-container {
+  width: min(900px, 92vw);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 20px;
+  background: rgba(25, 39, 52, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  border-radius: var(--radius);
+  backdrop-filter: blur(8px) saturate(120%);
+  color: #eef2f7;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+  text-align: center;
+}
+
+.game-container h1 {
+  margin: 0;
+  color: #4fb9ff;
+  text-transform: capitalize;
+}
+
+.guess-form {
+  display: flex;
+  gap: 10px;
+}
+
+.guess-form input {
+  flex-grow: 1;
+  height: 40px;
+  border-radius: 10px;
+  border: 1px solid rgba(15, 111, 236, 0.25);
+  background: rgba(173, 216, 230, 0.25);
+  color: #0f172a;
+  padding: 8px 12px;
+  outline: none;
+  transition: all .15s ease;
+}
+.guess-form input:focus {
+  border-color: #84c5ff;
+  background: rgba(173, 216, 230, 0.45);
+  box-shadow: 0 0 0 3px rgba(132, 197, 255, 0.35);
+}
+
+.guess-form button {
+  height: 40px;
+  border-radius: 10px;
+  border: 0;
+  background: var(--brand);
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 0 20px;
+}
+
+.results-wrapper {
+  overflow-x: auto; /* Para rolagem em telas pequenas */
+}
+
+.results-grid {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+.results-grid th,
+.results-grid td {
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 10px 12px;
+  text-align: center;
+  min-width: 100px;
+}
+
+.results-grid th {
+  background-color: rgba(0, 0, 0, 0.2);
+  font-weight: 600;
+}
+
+/* CORES DAS PISTAS */
+.results-grid .correto {
+  background-color: #28a745; /* Verde */
+  color: white;
+}
+.results-grid .parcial {
+  background-color: #ffc107; /* Amarelo */
+  color: #333;
+}
+.results-grid .incorreto {
+  background-color: #dc3545; /* Vermelho */
+  color: white;
+}
+
+#mensagem-final {
+  font-size: 18px;
+  font-weight: bold;
+}

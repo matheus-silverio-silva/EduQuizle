@@ -22,7 +22,7 @@
 </header>
 
 <main class="stage" role="main">
-  <form class="menu" action="/cadastro" method="post" autocomplete="on">
+  <form class="menu" onsubmit="handleCadastro(event)" autocomplete="on">
     <h1>Cadastro</h1>
 
     <p id="msg" class="helper" aria-live="polite"></p>
@@ -72,25 +72,9 @@
 
 <script>
   document.getElementById('y').textContent = new Date().getFullYear();
-
-  const p = new URLSearchParams(location.search);
-  const msg = document.getElementById('msg');
-
-  if (p.has('erro')) {
-    msg.style.color = 'red';
-    msg.textContent = decodeURIComponent(p.get('erro'));
-  }
-  if (p.has('ok')) {
-    msg.style.color = 'green';
-    msg.textContent = decodeURIComponent(p.get('ok'));
-  }
-  const safeFields = ['nome','login','email'];
-  safeFields.forEach(f => {
-    if (p.has(f)) {
-      const el = document.getElementById(f);
-      if (el) el.value = p.get(f);
-    }
-  });
 </script>
+
+<script src="api.js"></script>
+
 </body>
 </html>

@@ -22,7 +22,7 @@
 </header>
 
 <main class="stage" role="main">
-  <form action="/login" method="post" autocomplete="on" class="menu">
+  <form onsubmit="handleLogin(event)" autocomplete="on" class="menu">
     <h1>Login</h1>
 
     <p id="msg" aria-live="polite"></p>
@@ -48,9 +48,11 @@
   <script>
     const p = new URLSearchParams(location.search);
     const msg = document.getElementById('msg');
-    if (p.has('erro')) { msg.style.color = 'red'; msg.textContent = decodeURIComponent(p.get('erro')); }
-    if (p.has('ok'))   { msg.style.color = 'green'; msg.textContent = decodeURIComponent(p.get('ok')); }
-    if (p.has('login')) document.getElementById('login').value = p.get('login');
+    // Mantido apenas para exibir a mensagem de sucesso após o cadastro.
+    if (p.has('ok')) {
+      msg.style.color = 'green';
+      msg.textContent = decodeURIComponent(p.get('ok'));
+    }
   </script>
 </main>
 
@@ -65,5 +67,8 @@
 <script>
   document.getElementById('y').textContent = new Date().getFullYear();
 </script>
+
+<script src="api.js"></script>
+
 </body>
 </html>
