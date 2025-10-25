@@ -1,19 +1,21 @@
 package br.com.eduquizle.api.repositorios;
 
 import br.com.eduquizle.api.entidades.Biologia;
+import br.com.eduquizle.api.entidades.Historia;
 import br.com.eduquizle.api.entidades.enums.ReinoBiologico;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 
 @Repository
-public interface BiologiaRepository extends JpaRepository<Biologia, Integer> {
+public interface HistoriaRepository extends JpaRepository<Historia, Integer> {
 
     @SuppressWarnings("JpaQlInspection")
-    @Query(value = "SELECT g.nome FROM Biologia g")
+    @Query(value = " SELECT g.nome FROM Historia g")
     List<String> findAllNomes();
-    Optional<Biologia> findByNomeIgnoreCase(String nome);
-    Optional<Biologia> findByReino(ReinoBiologico reino);
+    Optional<Historia> findByNomeIgnoreCase(String nome);
+    Optional<Historia> findByAnoAcontecimento(Integer anoAcontecimento);
 }

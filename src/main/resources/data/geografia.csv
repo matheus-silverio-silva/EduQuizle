@@ -1,0 +1,41 @@
+nome,continente,subRegiao,capital,idiomaPrincipal,moeda,populacaoAprox
+Brasil,AMERICA_DO_SUL,America do Sul,Brasília,Português,Real,215000000
+Argentina,AMERICA_DO_SUL,America do Sul,Buenos Aires,Espanhol,Peso Argentino,45000000
+Estados Unidos,AMERICA_DO_NORTE,America do Norte,Washington D.C.,Inglês,Dólar Americano,330000000
+Canadá,AMERICA_DO_NORTE,America do Norte,Ottawa,Inglês/Francês,Dólar Canadense,38000000
+México,AMERICA_DO_NORTE,America Central,Cidade do México,Espanhol,Peso Mexicano,130000000
+Reino Unido,EUROPA,Europa Ocidental,Londres,Inglês,Libra Esterlina,67000000
+França,EUROPA,Europa Ocidental,Paris,Francês,Euro,65000000
+Alemanha,EUROPA,Europa Ocidental,Berlim,Alemão,Euro,83000000
+Itália,EUROPA,Europa Meridional,Roma,Italiano,Euro,59000000
+Espanha,EUROPA,Europa Meridional,Madrid,Espanhol,Euro,47000000
+Portugal,EUROPA,Europa Meridional,Lisboa,Português,Euro,10000000
+Rússia,EUROPA,Europa Oriental/Norte da Ásia,Moscou,Russo,Rublo Russo,145000000
+China,ASIA,Ásia Oriental,Pequim,Mandarim,Yuan,1440000000
+Japão,ASIA,Ásia Oriental,Tóquio,Japonês,Iene,126000000
+Índia,ASIA,Ásia Meridional,Nova Délhi,Híndi/Inglês,Rúpia Indiana,1400000000
+Coreia do Sul,ASIA,Ásia Oriental,Seul,Coreano,Won Sul-Coreano,51000000
+Austrália,OCEANIA,Austrália e Nova Zelândia,Camberra,Inglês,Dólar Australiano,26000000
+Nova Zelândia,OCEANIA,Austrália e Nova Zelândia,Wellington,Inglês/Maori,Dólar Neozelandês,5000000
+África do Sul,AFRICA,África Austral,Pretória,Inglês/Zulu/Outras,Rand,60000000
+Egito,AFRICA,Norte da África,Cairo,Árabe,Libra Egípcia,104000000
+Nigéria,AFRICA,África Ocidental,Abuja,Inglês,Naira,211000000
+Quênia,AFRICA,África Oriental,Nairóbi,Inglês/Suaíli,Xelim Queniano,54000000
+Chile,AMERICA_DO_SUL,America do Sul,Santiago,Espanhol,Peso Chileno,19000000
+Colômbia,AMERICA_DO_SUL,America do Sul,Bogotá,Espanhol,Peso Colombiano,51000000
+Peru,AMERICA_DO_SUL,America do Sul,Lima,Espanhol,Sol,33000000
+Venezuela,AMERICA_DO_SUL,America do Sul,Caracas,Espanhol,Bolívar Soberano,28000000
+Suécia,EUROPA,Europa Setentrional,Estocolmo,Sueco,Corona Sueca,10000000
+Noruega,EUROPA,Europa Setentrional,Oslo,Norueguês,Corona Norueguesa,5000000
+Finlândia,EUROPA,Europa Setentrional,Helsinque,Finlandês/Sueco,Euro,5500000
+Polônia,EUROPA,Europa Oriental,Varsóvia,Polonês,Złoty,38000000
+Grécia,EUROPA,Europa Meridional,Atenas,Grego,Euro,10000000
+Turquia,ASIA,Ásia Ocidental/Europa Meridional,Ancara,Turco,Lira Turca,84000000
+Irã,ASIA,Ásia Meridional,Teerã,Persa,Rial Iraniano,85000000
+Arábia Saudita,ASIA,Ásia Ocidental,Riad,Árabe,Rial Saudita,35000000
+Vietnã,ASIA,Sudeste Asiático,Hanói,Vietnamita,Dong,97000000
+Tailândia,ASIA,Sudeste Asiático,Bangkok,Tailandês,Baht,70000000
+Indonésia,ASIA,Sudeste Asiático,Jacarta,Indonésio,Rúpia Indonésia,276000000
+Malásia,ASIA,Sudeste Asiático,Kuala Lumpur,Malaio,Ringgit,32000000
+Filipinas,ASIA,Sudeste Asiático,Manila,Filipino/Inglês,Peso Filipino,111000000
+Marrocos,AFRICA,Norte da África,Rabat,Árabe/Berbere,Dirham Marroquino,37000000

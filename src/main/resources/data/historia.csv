@@ -1,0 +1,41 @@
+nome,anoAcontecimento,paisRegiao,figuraChave,periodoEpoca,tema
+Revolução Francesa,1789,França,Luís XVI,Idade Contemporânea,REVOLUCAO
+Queda da Bastilha,1789,França,Camille Desmoulins,Idade Contemporânea,REVOLUCAO
+Napoleão Bonaparte,1769,França,Ele mesmo,Idade Contemporânea,IMPERIO
+Primeira Guerra Mundial,1914,Europa,Francisco Ferdinando,Idade Contemporânea,GUERRA
+Segunda Guerra Mundial,1939,Mundo,Adolf Hitler,Idade Contemporânea,GUERRA
+Queda do Muro de Berlim,1989,Alemanha,Mikhail Gorbachev,Idade Contemporânea,CRISE
+Revolução Russa,1917,Rússia,Lenin,Idade Contemporânea,REVOLUCAO
+Guerra Fria,1947,Mundo,Stalin/Truman,Idade Contemporânea,GUERRA
+Descobrimento do Brasil,1500,Brasil,Pedro Álvares Cabral,Idade Moderna,DESCOBERTA
+Independência do Brasil,1822,Brasil,Dom Pedro I,Idade Contemporânea,INDEPENDENCIA
+Proclamação da República do Brasil,1889,Brasil,Deodoro da Fonseca,Idade Contemporânea,REPUBLICA
+Revolução Industrial,1760,Inglaterra,James Watt,Idade Moderna,REVOLUCAO
+Renascimento,1400,Itália,Leonardo da Vinci,Idade Moderna,MOVIMENTO_SOCIAL
+Iluminismo,1715,Europa,Voltaire,Idade Moderna,MOVIMENTO_SOCIAL
+Revolução Americana,1776,Estados Unidos,George Washington,Idade Moderna,INDEPENDENCIA
+Guerra Civil Americana,1861,Estados Unidos,Abraham Lincoln,Idade Contemporânea,GUERRA
+Descoberta da América,1492,América,Cristóvão Colombo,Idade Moderna,DESCOBERTA
+Império Romano,-27,Itália,Júlio César,Antiguidade,IMPERIO
+Queda do Império Romano,476,Itália,Rômulo Augusto,Idade Média,CRISE
+Alexandre o Grande,-356,Grécia/Macedônia,Ele mesmo,Antiguidade,IMPERIO
+Idade Média,476,Europa,Carlos Magno,Idade Média,IMPERIO
+Reforma Protestante,1517,Alemanha,Martinho Lutero,Idade Moderna,MOVIMENTO_SOCIAL
+Contrarreforma,1545,Europa,Papa Paulo III,Idade Moderna,MOVIMENTO_SOCIAL
+Peste Negra,1347,Europa,Nenhuma,Idade Média,CRISE
+Guerra dos Cem Anos,1337,França/Inglaterra,Joana d'Arc,Idade Média,GUERRA
+Cruzadas,1096,Oriente Médio,Papa Urbano II,Idade Média,GUERRA
+Inquisição Espanhola,1478,Espanha,Reis Católicos,Idade Moderna,MOVIMENTO_SOCIAL
+Gutenberg e a Imprensa,1439,Alemanha,Johannes Gutenberg,Idade Moderna,DESCOBERTA
+Revolução Cubana,1959,Cuba,Fidel Castro,Idade Contemporânea,REVOLUCAO
+Apartheid,1948,África do Sul,Nelson Mandela,Idade Contemporânea,MOVIMENTO_SOCIAL
+Guerra do Vietnã,1955,Vietnã,Ho Chi Minh,Idade Contemporânea,GUERRA
+Primeiro Voo de Santos Dumont,1906,França,Santos Dumont,Idade Contemporânea,DESCOBERTA
+Criação da ONU,1945,Estados Unidos,Franklin D. Roosevelt,Idade Contemporânea,TRATADO
+Tratado de Versalhes,1919,França,Woodrow Wilson,Idade Contemporânea,TRATADO
+Unificação Italiana,1861,Itália,Giuseppe Garibaldi,Idade Contemporânea,INDEPENDENCIA
+Unificação Alemã,1871,Alemanha,Otto von Bismarck,Idade Contemporânea,IMPERIO
+Crise de 1929,1929,Estados Unidos,Herbert Hoover,Idade Contemporânea,CRISE
+Ditadura Militar no Brasil,1964,Brasil,Castello Branco,Idade Contemporânea,REPUBLICA
+Diretas Já,1984,Brasil,Tancredo Neves,Idade Contemporânea,MOVIMENTO_SOCIAL
+Abolição da Escravatura no Brasil,1888,Brasil,Princesa Isabel,Idade Contemporânea,TRATADO

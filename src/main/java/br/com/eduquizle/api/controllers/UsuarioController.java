@@ -22,9 +22,6 @@ public class UsuarioController {
 
     @PostMapping("/cadastro")
     public ResponseEntity<Usuario> cadastrar(@RequestBody CadastroRequestDTO request) {
-        // A anotação @RequestBody mapeia o JSON vindo do frontend para o nosso DTO
-
-        // Lógicas que antes estavam no Servlet
         if (!request.isTermos()) {
             throw new IllegalArgumentException("É preciso aceitar os termos de uso.");
         }
