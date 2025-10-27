@@ -70,25 +70,24 @@
     </dependency>
   </dependencies>
 
-  <build>
+<build>
     <plugins>
-      <!-- Executar com: mvn spring-boot:run / gerar jar: mvn clean package -->
-      <plugin>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-maven-plugin</artifactId>
-        <configuration>
-          <excludes>
-            <!-- exemplo: excluir Lombok do fat-jar (não é necessário, só ilustrativo)
-            <exclude>
-              <groupId>org.projectlombok</groupId>
-              <artifactId>lombok</artifactId>
-            </exclude>
-            -->
-          </excludes>
-        </configuration>
-      </plugin>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-resources-plugin</artifactId>
+            <version>3.3.1</version> 
+            <configuration>
+                <encoding>UTF-8</encoding>
+            </configuration>
+        </plugin>
+
+        <plugin>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        
     </plugins>
-  </build>
+</build>
 
   <!-- Repositórios extras (normalmente não precisa) -->
   <!--
