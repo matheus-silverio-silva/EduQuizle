@@ -1,6 +1,28 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
+  <script>
+    (function() {
+      const themeKey = 'eduquizle_tema';
+      const themeValue = localStorage.getItem(themeKey) || 'system'; // Pega o tema salvo ou usa 'system' como padrão
+      const root = document.documentElement;
+
+      root.classList.remove('light-mode', 'dark-mode'); // Limpa classes anteriores
+
+      let themeToApply = themeValue;
+      if (themeValue === 'system') {
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        themeToApply = prefersDark ? 'dark' : 'light';
+      }
+
+      if (themeToApply === 'dark') {
+        root.classList.add('dark-mode');
+      } else {
+        root.classList.add('light-mode'); // Ou não adicione se 'light' for o padrão sem classe
+      }
+      // Não precisa de console.log aqui para produção
+    })();
+  </script>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>EduQuizle — Desafio Livre</title>

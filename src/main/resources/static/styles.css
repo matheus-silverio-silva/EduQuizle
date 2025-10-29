@@ -431,3 +431,107 @@ body::before{
   font-size: 18px;
   font-weight: bold;
 }
+
+/* === ESTILOS PARA TEMA ESCURO === */
+html.dark-mode body {
+  background-color: black !important;
+  color: white !important;
+}
+
+html.dark-mode body {
+  background-color: #1a1a1a;
+  color: #e0e0e0;
+}
+html.dark-mode body::before {
+  opacity: 0.1;
+}
+
+html.dark-mode .topbar,
+html.dark-mode .foot {
+  background: rgba(10, 10, 10, 0.7);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: #cccccc;
+}
+
+html.dark-mode .foot .foot-links a {
+  color: var(--brand);
+}
+
+html.dark-mode .doc-card,
+html.dark-mode .menu,
+html.dark-mode .game-container {
+  background: rgba(40, 40, 40, 0.7);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: #e0e0e0;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+html.dark-mode .doc-card h1,
+html.dark-mode .doc-card h2,
+html.dark-mode .menu h1,
+html.dark-mode .game-container h1 {
+  color: #84c5ff;
+}
+html.dark-mode .doc-card a,
+html.dark-mode .menu .helper a,
+html.dark-mode .checkbox a,
+html.dark-mode .game-container .helper a {
+  color: #90caf9;
+}
+
+html.dark-mode .menu input,
+html.dark-mode .guess-form input,
+html.dark-mode select {
+  background: rgba(70, 70, 70, 0.5);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: #e0e0e0;
+}
+html.dark-mode .menu input::placeholder,
+html.dark-mode .guess-form input::placeholder {
+  color: #999999;
+}
+html.dark-mode .menu input:focus,
+html.dark-mode .guess-form input:focus,
+html.dark-mode select:focus {
+  border-color: #84c5ff;
+  background: rgba(90, 90, 90, 0.6);
+  box-shadow: 0 0 0 3px rgba(132, 197, 255, 0.25);
+}
+html.dark-mode .checkbox input[type="checkbox"],
+html.dark-mode input[type="radio"] {
+  accent-color: #84c5ff;
+}
+html.dark-mode .checkbox span,
+html.dark-mode .theme-options label {
+  color: #dde5f1;
+}
+html.dark-mode .menu button,
+html.dark-mode .guess-form button {
+  background: #0d6efd;
+  box-shadow: 0 6px 20px rgba(13, 110, 253, 0.25);
+}
+html.dark-mode .menu button:hover,
+html.dark-mode .guess-form button:hover {
+  background: #0b5ed7;
+}
+html.dark-mode .home-card {
+  background: rgba(30, 30, 30, 0.92);
+  border-color: rgba(255,255,255,.1);
+  color: #eef2f7;
+  box-shadow: 0 12px 24px rgba(0,0,0,.4);
+}
+html.dark-mode .home-card:hover {
+  background: rgba(40, 40, 40, 0.96);
+  box-shadow: 0 16px 28px rgba(0,0,0,.5), 0 0 0 6px rgba(13, 110, 253, 0.1);
+}
+
+html.dark-mode .results-grid th {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #f0f0f0;
+}
+html.dark-mode .results-grid td {
+  border-color: rgba(255, 255, 255, 0.15);
+}
+html.dark-mode .results-grid .parcial {
+  color: #111;
+}

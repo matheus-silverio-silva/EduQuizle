@@ -1,10 +1,10 @@
 let materia = '';
 let respostaCorretaId = null;
 let tentativas = 0;
-const MAX_TENTATIVAS = 10; // Usar const para valores que não mudam
+const MAX_TENTATIVAS = 8;
 let gameOver = false;
 let cabecalhos = [];
-let listaNomesCompleta = []; // Armazena a lista completa de nomes para referência
+let listaNomesCompleta = [];
 
 const tituloMateriaEl = document.getElementById('titulo-materia');
 const palpiteInputEl = document.getElementById('palpite-input');
@@ -13,43 +13,52 @@ const gridCabecalhoEl = document.getElementById('grid-cabecalho');
 const gridResultadosEl = document.getElementById('grid-resultados');
 const tentativasEl = document.getElementById('tentativas');
 const mensagemFinalEl = document.getElementById('mensagem-final');
-const guessFormEl = document.querySelector('.guess-form'); // Pegar o formulário
-const guessButtonEl = guessFormEl.querySelector('button'); // Pegar o botão
+const guessFormEl = document.querySelector('.guess-form');
+const guessButtonEl = guessFormEl.querySelector('button');
 
 function displayMessage(message, color = 'red') {
     mensagemFinalEl.textContent = message;
     mensagemFinalEl.style.color = color;
-    console.error(message); // Mantém o log de erro para debug
+    console.error(message);
 }
 
 async function setupGame() {
+    // MODIFICADO: A lógica para determinar a matéria pode mudar.
+    // Talvez o desafio diário seja único, ou ainda precise da matéria da URL?
+    // Por enquanto, vamos manter a leitura da URL, mas talvez precise ajustar.
     const params = new URLSearchParams(window.location.search);
-    materia = params.get('materia');
+    materia = params.get('materia'); // Ou obter da API do desafio diário?
 
-    if (!materia) {
-        displayMessage('Matéria não especificada na URL.');
-        palpiteInputEl.disabled = true; // Desabilita o jogo se não houver matéria
-        guessButtonEl.disabled = true;
-        return;
+    if (!materia) { // Esta validação pode não ser mais necessária se a API diária retornar a matéria
+        displayMessage('Matéria não especificada.');
+        // ... desabilitar inputs ...
+        // return; // Comentar/Remover se a API diária definir a matéria
     }
-    tituloMateriaEl.textContent = `Desafio de ${materia.charAt(0).toUpperCase() + materia.slice(1)}`;
 
-    await carregarDadosIniciais();
+    tentativasEl.parentElement.textContent = `Tentativas: ${tentativas}/${MAX_TENTATIVAS}`;
+
+    await carregarDadosIniciaisDiario(); // MODIFICADO: Chama a função específica do diário
 }
 
-async function carregarDadosIniciais() {
+async function carregarDadosIniciaisDiario() { // MODIFICADO: Nome da função
     try {
-        const desafioResponse = await fetch(`/api/desafios/livre?materia=${materia}`);
+        // Pode precisar enviar informações de autenticação (headers) no futuro
+        const desafioResponse = await fetch(`/api/desafios/diario?materia=${materia}`); // Ajuste a URL se necessário (talvez não precise de matéria?)
         if (!desafioResponse.ok) {
-            throw new Error(`Erro ao buscar desafio: ${desafioResponse.status} ${desafioResponse.statusText}`);
+            // TODO: Tratar casos específicos, como "Desafio já completado hoje"
+            throw new Error(`Erro ao buscar desafio diário: ${desafioResponse.status} ${desafioResponse.statusText}`);
         }
         const desafio = await desafioResponse.json();
         if (!desafio || !desafio.id || !Array.isArray(desafio.cabecalhos)) {
-            throw new Error('Resposta da API de desafio inválida.');
+            throw new Error('Resposta da API de desafio diário inválida.');
         }
         respostaCorretaId = desafio.id;
         cabecalhos = desafio.cabecalhos;
+        // Se a API retornar a matéria, atualize o título:
+        // materia = desafio.materia; // Exemplo
+        tituloMateriaEl.textContent = `Desafio Diário de ${materia.charAt(0).toUpperCase() + materia.slice(1)}`; // Garante título correto
 
+        // Busca a lista de nomes possíveis para o autocomplete (mesmo endpoint do livre)
         const palpitesResponse = await fetch(`/api/respostas/nomes?materia=${materia}`);
         if (!palpitesResponse.ok) {
             throw new Error(`Erro ao buscar lista de nomes: ${palpitesResponse.status} ${palpitesResponse.statusText}`);
@@ -61,36 +70,15 @@ async function carregarDadosIniciais() {
         listaNomesCompleta = listaNomes;
 
         renderizarCabecalho();
-
         renderizarSugestoes();
+        // TODO: Carregar tentativas anteriores do dia, se houver
 
     } catch (error) {
-        displayMessage(`Erro ao carregar dados iniciais: ${error.message}`);
+        displayMessage(`Erro ao carregar desafio diário: ${error.message}`);
         palpiteInputEl.disabled = true;
         guessButtonEl.disabled = true;
     }
 }
-
-function renderizarCabecalho() {
-    gridCabecalhoEl.innerHTML = ''; // Limpa cabeçalho anterior, se houver
-    const cabecalhoRow = document.createElement('tr');
-    cabecalhos.forEach(texto => {
-        const th = document.createElement('th');
-        th.textContent = texto;
-        cabecalhoRow.appendChild(th);
-    });
-    gridCabecalhoEl.appendChild(cabecalhoRow);
-}
-
-function renderizarSugestoes() {
-    sugestoesEl.innerHTML = '';
-    listaNomesCompleta.forEach(nome => {
-        const option = document.createElement('option');
-        option.value = nome;
-        sugestoesEl.appendChild(option);
-    });
-}
-
 async function handleGuess(event) {
     event.preventDefault();
     if (gameOver || guessButtonEl.disabled) return;
@@ -104,15 +92,16 @@ async function handleGuess(event) {
     mensagemFinalEl.textContent = '';
 
     tentativas++;
-    tentativasEl.textContent = tentativas;
+    tentativasEl.parentElement.textContent = `Tentativas: ${tentativas}/${MAX_TENTATIVAS}`; // Atualiza contador na interface
 
     try {
-        const response = await fetch('/api/desafios/comparar', {
+        const response = await fetch('/api/desafios/diario/comparar', { // MODIFICADO: URL
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+                'Content-Type': 'application/json',
+            },
             body: JSON.stringify({
                 palpite: palpite,
-                respostaId: respostaCorretaId,
             }),
         });
 
@@ -121,7 +110,7 @@ async function handleGuess(event) {
             try {
                 const errorData = await response.json();
                 errorMsg = errorData.erro || errorData.message || errorMsg;
-            } catch(jsonError) { }
+            } catch (jsonError) { /* Ignora */ }
             throw new Error(errorMsg);
         }
 
@@ -133,7 +122,7 @@ async function handleGuess(event) {
         adicionarResultadoNaGrid(palpite, resultado.pistas);
 
         if (resultado.acertou) {
-            finalizarJogo(true, resultado.respostaCorreta || palpite); // Usa o próprio palpite se a API não retornar o nome
+            finalizarJogo(true, resultado.respostaCorreta || palpite);
         } else if (tentativas >= MAX_TENTATIVAS) {
             finalizarJogo(false, resultado.respostaCorreta);
         }
@@ -142,8 +131,8 @@ async function handleGuess(event) {
 
     } catch (error) {
         displayMessage(`Erro ao processar palpite: ${error.message}`);
-        tentativas--;
-        tentativasEl.textContent = tentativas;
+        tentativas--; // Desfaz incremento
+        tentativasEl.parentElement.textContent = `Tentativas: ${tentativas}/${MAX_TENTATIVAS}`; // Atualiza contador
 
     } finally {
         if (!gameOver) {
@@ -153,40 +142,6 @@ async function handleGuess(event) {
             palpiteInputEl.focus();
         }
     }
-}
-
-function adicionarResultadoNaGrid(palpiteTexto, pistas) {
-    const newRow = document.createElement('tr');
-    cabecalhos.forEach((cabecalho, index) => {
-        const td = document.createElement('td');
-        const cabecalhoKey = cabecalho; // Usa o nome exato do cabeçalho como chave
-
-        if (index === 0 && cabecalhoKey.toLowerCase() === 'palpite') {
-            td.textContent = palpiteTexto;
-            const statusPalpite = pistas[cabecalhoKey]?.status || 'incorreto'; // Assume incorreto se não vier
-            td.className = statusPalpite;
-        } else {
-            const pistaInfo = pistas[cabecalhoKey];
-
-            if (pistaInfo) {
-                td.textContent = pistaInfo.texto !== null && pistaInfo.texto !== undefined ? pistaInfo.texto : '-';
-
-                td.className = pistaInfo.status || 'incorreto';
-
-                if (pistaInfo.direcao === 'maior') {
-                    td.textContent += ' ↑';
-                } else if (pistaInfo.direcao === 'menor') {
-                    td.textContent += ' ↓';
-                }
-            } else {
-                td.textContent = '?';
-                td.className = 'incorreto';
-                console.warn(`Pista não encontrada para o cabeçalho: ${cabecalhoKey}`);
-            }
-        }
-        newRow.appendChild(td);
-    });
-    gridResultadosEl.appendChild(newRow);
 }
 
 function finalizarJogo(venceu, respostaCorreta) {
@@ -201,5 +156,4 @@ function finalizarJogo(venceu, respostaCorreta) {
         displayMessage(`Fim de jogo! A resposta era: ${respostaCorreta || 'N/A'}`, '#dc3545');
     }
 }
-
 document.addEventListener('DOMContentLoaded', setupGame);

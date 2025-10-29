@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Configurações - EduQuizle</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+
+  <script>
+    (function() {
+      const themeKey = 'eduquizle_tema';
+      const themeValue = localStorage.getItem(themeKey) || 'system';
+      const root = document.documentElement;
+      root.classList.remove('light-mode', 'dark-mode');
+      let themeToApply = themeValue;
+      if (themeValue === 'system') {
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        themeToApply = prefersDark ? 'dark' : 'light';
+      }
+      if (themeToApply === 'dark') {
+        root.classList.add('dark-mode');
+      } else {
+        root.classList.add('light-mode');
+      }
+    })();
+  </script>
+</head>
+<body>
+<header class="topbar" role="banner">
+  <div class="container">
+    <a class="brand" href="home.html" aria-label="EduQuizle">
+      <img src="Imagens/logo projeto.png" alt="EduQuizle">
+    </a>
+    <nav class="social" aria-label="Redes sociais">
+      <a href="#" aria-label="GitHub">GH</a>
+      <a href="#" aria-label="LinkedIn">in</a>
+    </nav>
+  </div>
+</header>
+
+<main class="stage" role="main">
+  <article class="doc-card">
+    <p class="helper" style="text-align: left; margin-bottom: 20px;">
+      <a href="home.html" data-i18n-key="back_to_home">← Voltar ao início</a>
+    </p>
+
+    <h1 data-i18n-key="settings_title">Configurações</h1>
+
+    <section class="config-section">
+      <h2 data-i18n-key="theme_section_title">Aparência (Tema)</h2>
+      <p data-i18n-key="theme_section_desc">Escolha o tema visual da aplicação.</p>
+      <div class="theme-options" style="display: flex; gap: 15px; margin-top: 10px;">
+        <label>
+          <input type="radio" name="theme" value="light" id="theme-light"> <span data-i18n-key="theme_light">Claro</span>
+        </label>
+        <label>
+          <input type="radio" name="theme" value="dark" id="theme-dark"> <span data-i18n-key="theme_dark">Escuro</span>
+        </label>
+        <label>
+          <input type="radio" name="theme" value="system" id="theme-system"> <span data-i18n-key="theme_system">Padrão do Sistema</span>
+        </label>
+      </div>
+    </section>
+
+    <p id="config-status" class="helper" style="margin-top: 20px; color: #28a745; min-height: 1.2em;"></p>
+
+    <hr style="border-color: rgba(255,255,255,.2); margin: 20px 0;">
+
+    <section class="config-section">
+      <h2 data-i18n-key="profile_section_title">Perfil do Usuário</h2>
+      <form id="profile-form" class="menu" style="background: none; border: none; box-shadow: none; padding: 10px 0 0 0; width: 100%;">
+        <label>
+          <span data-i18n-key="profile_login">Login:</span>
+          <input type="text" id="profile-login" name="login" readonly disabled style="opacity: 0.7; cursor: not-allowed;">
+          <small class="helper" style="text-align: left; font-size: 11px;" data-i18n-key="profile_login_note">(Não pode ser alterado)</small>
+        </label>
+        <label>
+          <span data-i18n-key="profile_name">Nome:</span>
+          <input type="text" id="profile-name" name="nome" required minlength="3">
+        </label>
+        <label>
+          <span data-i18n-key="profile_email">E-mail:</span>
+          <input type="email" id="profile-email" name="email" required>
+        </label>
+        <button type="submit" id="save-profile-button" data-i18n-key="profile_save_button">Salvar Alterações</button>
+        <p id="profile-status" class="helper" style="min-height: 1.2em;"></p>
+      </form>
+    </section>
+
+    <hr style="border-color: rgba(255,255,255,.2); margin: 20px 0;">
+
+    <section class="config-section">
+      <h2 data-i18n-key="password_section_title">Alterar Senha</h2>
+      <form id="password-form" class="menu" style="background: none; border: none; box-shadow: none; padding: 10px 0 0 0; width: 100%;">
+        <label>
+          <span data-i18n-key="password_current">Senha Atual:</span>
+          <input type="password" id="password-current" name="senhaAtual" required autocomplete="current-password">
+        </label>
+        <label>
+          <span data-i18n-key="password_new">Nova Senha:</span>
+          <input type="password" id="password-new" name="novaSenha" required minlength="6" autocomplete="new-password">
+        </label>
+        <label>
+          <span data-i18n-key="password_confirm">Confirmar Nova Senha:</span>
+          <input type="password" id="password-confirm" name="confirmacaoNovaSenha" required minlength="6" autocomplete="new-password">
+        </label>
+        <button type="submit" id="change-password-button" data-i18n-key="password_change_button">Alterar Senha</button>
+        <p id="password-status" class="helper" style="min-height: 1.2em;"></p>
+      </form>
+    </section>
+
+  </article>
+</main>
+
+<footer class="foot" role="contentinfo">
+  <div class="foot-wrap">
+    <span>© <span id="year"></span> EduQuizle</span>
+    <nav class="foot-links">
+      <a href="politica.html">Política de Privacidade</a> ·
+      <a href="termos.html">Termos de Uso</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+<script src="config.js" defer></script>
+<script src="language.js" defer></script>
+<script src="profile.js" defer></script>
+</body>
+</html>
