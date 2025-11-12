@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import br.com.eduquizle.api.repositorios.UsuarioRepository;
 
+import java.util.Optional;
+
 import static org.hibernate.internal.util.StringHelper.isBlank;
 
 @Service
@@ -34,11 +36,6 @@ public class UsuarioService {
         return usuarioRepository.save(usuario);
     }
 
-    @Transactional(readOnly = true)
-    public Usuario autenticar(String login, String senha) {
-        if (isBlank(login) || isBlank(senha)) return null;
-        return usuarioRepository.findByLoginAndSenha(login.trim(), senha.trim()).orElse(null);
-    }
     private void validarUsuario(Usuario usuario) {
         if (usuario == null) {
             throw new IllegalArgumentException("Usuário não pode ser nulo.");
@@ -65,4 +62,41 @@ public class UsuarioService {
             throw new IllegalArgumentException("E-mail já cadastrado.");
         }
     }
+    @Transactional(readOnly = true)
+    public Usuario autenticar(String login, String senha) {
+        Usuario usuario = this.buscarPorLogin(login);
+
+        if (usuario != null && usuario.getSenha().equals(senha)) {
+            return usuario;
+        }
+        return null;
+    }
+
+    @Transactional
+    public Usuario atualizarPerfil(String login, String novoNome, String novoEmail) {
+        Usuario usuario = usuarioRepository.findByLogin(login)
+                .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado."));
+
+        Optional<Usuario> emailExistente = usuarioRepository.findByEmail(novoEmail);
+        if (emailExistente.isPresent() && !emailExistente.get().getId().equals(usuario.getId())) {
+            throw new IllegalArgumentException("Este e-mail já está em uso por outra conta.");
+        }
+
+        usuario.setNome(novoNome);
+        usuario.setEmail(novoEmail);
+
+        return usuarioRepository.save(usuario);
+    }
+
+    @Transactional
+    public void alterarSenha(String login, String senhaAtual, String novaSenha) {
+        Usuario usuario = usuarioRepository.findByLogin(login)
+                .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado."));
+        if (!usuario.getSenha().equals(senhaAtual)) {
+            throw new IllegalArgumentException("A senha atual está incorreta.");
+        }
+        usuario.setSenha(novaSenha);
+        usuarioRepository.save(usuario);
+    }
+
 }

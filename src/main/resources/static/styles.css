@@ -1,4 +1,5 @@
-:root{
+/* === CONFIGURAÇÃO GLOBAL E TEMA === */
+:root {
   --bg-image: url("Imagens/fundoLogin.jpg");
   --brand: #0f6fec;
   --brand-600: #0b56b6;
@@ -9,360 +10,182 @@
   --menu-w: 520px;
   --radius: 16px;
   --bg-size: 1400px;
-  --bar-tint: 15,111,236;
+  --bar-tint: 15, 111, 236;
   --bar-alpha: 0.10;
 }
 
-*{ box-sizing: border-box; }
-html, body{ height:100%; }
-html{ overflow:hidden; }
-
-body{
-  margin:0;
-  height:100vh;
-  overflow:hidden;
-  font-family:"Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-  color:var(--ink);
-  position:relative;
+* {
+  box-sizing: border-box;
 }
-
-body::before{
-  content:"";
-  position:fixed;
-  inset:0;
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  height: 100vh;
+  font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial,
+  sans-serif;
+  color: var(--ink);
+  position: relative;
+}
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
   background: var(--bg-image) repeat;
   background-size: var(--bg-size) var(--bg-size);
-  opacity:.25;
-  z-index:-1;
+  opacity: 0.25;
+  z-index: -1;
   animation: drift 60s linear infinite;
 }
-
-@keyframes drift{
+@keyframes drift {
   from { background-position: 0 0; }
-  to   { background-position: 900px -900px; }
+  to { background-position: 900px -900px; }
 }
 
-.topbar{
-  height: var(--header-h);
-  display:flex;
-  align-items:center;
+/* === HEADER E FOOTER (Layout Principal) === */
+.topbar,
+.foot {
   backdrop-filter: blur(6px);
   background: rgba(var(--bar-tint), var(--bar-alpha));
   border-bottom: 1px solid rgba(var(--bar-tint), 0.18);
+  display: flex;
+  align-items: center;
 }
-
-.topbar .container{
-  max-width:1100px;
-  margin:0 auto;
-  padding: 0 16px;
-  width:100%;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
+.topbar {
+  height: var(--header-h);
 }
-
-.brand img{ display:block; 
-  height: 160px;
-}
-
-.social a{
-  display:inline-grid;
-  place-items:center;
-  width:32px; height:32px;
-  margin-left:8px;
-  border-radius:10px;
-  background: rgba(255,255,255,.6);
-  border:1px solid rgba(0,0,0,.06);
-  text-decoration:none;
-  color:#111;
-  font-family: "Font Awesome 6 Free","Font Awesome 5 Free",Inter,system-ui;
-  font-weight:900;
-  transition: transform .2s ease, background .2s ease;
-}
-.social a:hover{ transform: translateY(-1px); background:#fff; }
-
-.stage{
-  height: calc(100vh - var(--header-h) - var(--footer-h));
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding: 0 12px;
-}
-
-.menu{
-  width: min(var(--menu-w), 92vw);
-  display:flex;
-  flex-direction:column;
-  gap:12px;
-  padding:22px 20px;
-  background: rgba(25, 39, 52, 0.45);
-  border: 1px solid rgba(255,255,255,.45);
-  border-radius: var(--radius);
-  backdrop-filter: blur(8px) saturate(120%);
-  color:#eef2f7;
-  box-shadow: 0 8px 24px rgba(0,0,0,.18);
-}
-.menu h1{
-  margin:0 0 6px;
-  font-size:22px;
-  color:#4fb9ff;
-}
-.menu label{ display:flex; flex-direction:column; gap:6px; }
-.menu label span{ font-size:12px; opacity:.9; }
-
-.menu input{
-  height:38px;
-  border-radius:10px;
-  border:1px solid rgba(15,111,236,.25);
-  background: rgba(173,216,230,.25);
-  color:#0f172a;
-  padding: 8px 10px;
-  outline:none;
-  transition: border-color .15s ease, background .15s ease, box-shadow .15s ease;
-}
-.menu input::placeholder{ color:#6c7a93; }
-.menu input:hover{ background: rgba(173,216,230,.35); }
-.menu input:focus{
-  border-color:#84c5ff;
-  background: rgba(173,216,230,.45);
-  box-shadow: 0 0 0 3px rgba(132,197,255,.35);
-}
-
-.menu button{
-  height:40px;
-  border-radius:10px;
-  border:0;
-  background:#0f6fec;
-  color:#fff;
-  font-weight:700;
-  letter-spacing:.2px;
-  cursor:pointer;
-  transition: transform .06s ease, background .15s ease, box-shadow .15s ease;
-  box-shadow: 0 6px 20px rgba(15,111,236,.35);
-}
-.menu button:hover{ background:#0b56b6; }
-.menu button:active{ transform: translateY(1px); }
-
-.helper{ text-align:center; font-size:12.5px; color:#dde5f1; }
-.helper a{ color:#87cefa; text-decoration:none; }
-.helper a:hover{ text-decoration:underline; }
-
-.foot{
+.foot {
   height: var(--footer-h);
-  display:flex;
-  align-items:center;
-  justify-content:center;
+  border-top: 1px solid rgba(var(--bar-tint), 0.18);
+  border-bottom: 0;
   font-size: 12.5px;
   color: #2a3650;
-  backdrop-filter: blur(4px);
-  background: rgba(var(--bar-tint), var(--bar-alpha));
-  border-top: 1px solid rgba(var(--bar-tint), 0.18);
+  justify-content: center;
 }
 
-@media (max-width: 520px){
-  .brand img{ height: 32px; }
-  :root{ --header-h: 52px; --menu-w: 460px; }
-  .menu{ padding:18px 16px; }
-}
-
-.checkbox{
-  display:flex;
-  align-items:flex-start;
-  gap:6px;             
-  color:#dde5f1;
-}
-
-.checkbox input[type="checkbox"]{
-  width:16px;           
-  height:16px;           
-  margin:0;             
-  accent-color: var(--brand); 
-}
-
-.checkbox span{
-  line-height:1.4;       
-}
-
-.checkbox a{
-  color:#87cefa;
-  text-decoration:none;
-}
-.checkbox a:hover{
-  text-decoration:underline;
-}
-.foot{
-  height: var(--footer-h);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size: 12.5px;
-  color: #2a3650;
-  backdrop-filter: blur(4px);
-  background: rgba(var(--bar-tint), var(--bar-alpha));
-  border-top: 1px solid rgba(var(--bar-tint), 0.18);
-}
-.foot .foot-wrap{
-  max-width:1100px;
-  width:100%;
+.topbar .container,
+.foot .foot-wrap {
+  max-width: 1100px;
+  margin: 0 auto;
   padding: 0 16px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
-.foot .foot-links a{
+.brand img {
+  display: block;
+  height: 60px; /* <-- MUDANÇA: Aumentado de 48px para 60px */
+}
+.social a {
+  display: inline-grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  margin-left: 8px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  text-decoration: none;
+  color: #111;
+  font-family: "Font Awesome 6 Free", "Font Awesome 5 Free", Inter, system-ui;
+  font-weight: 900;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+.social a:hover {
+  transform: translateY(-1px);
+  background: #fff;
+}
+.foot .foot-links a {
   color: var(--brand);
   text-decoration: none;
   font-weight: 600;
 }
-.foot .foot-links a:hover{ text-decoration: underline; }
-
-.doc-card{
-  width: min(900px, 92vw);
-  padding: 24px 22px;
-  background: rgba(25,39,52,.45);
-  border: 1px solid rgba(255,255,255,.45);
-  border-radius: var(--radius);
-  backdrop-filter: blur(8px) saturate(120%);
-  color: #eef2f7;
-  box-shadow: 0 8px 24px rgba(0,0,0,.18);
-  max-height: calc(100vh - var(--header-h) - var(--footer-h) - 40px);
-  overflow: auto;
-}
-.doc-card h1{ margin: 0 0 8px; font-size: 24px; color: #ffd54f; }
-.doc-card h2{ margin: 18px 0 8px; font-size: 18px; color:#e9efff; }
-.doc-card a{ color:#87cefa; }
-.doc-card a:hover{ text-decoration: underline; }
-
-* Ajustes só na home */
-.is-home .brand img{ height: 48px; }
-.is-home .topbar .container{ padding: 0 20px; }
-
-.home-grid{
-  max-width: 1100px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: 1.1fr .9fr;
-  gap: 28px;
-  align-items: center;
-  min-height: calc(100vh - var(--header-h) - var(--footer-h));
-  padding: 0 16px;
+.foot .foot-links a:hover {
+  text-decoration: underline;
 }
 
-.home-title{
-  margin: 0 0 12px;
+/* === CONTAINER DE CONTEÚDO PRINCIPAL === */
+.stage {
+  height: calc(100vh - var(--header-h) - var(--footer-h));
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 6px;
-  line-height: 1.1;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  font-size: clamp(32px, 4vw, 56px);
-  color: #1f2937;
-  text-shadow: 0 1px 2px rgba(0,0,0,.25);
-}
-.home-username{
-  font-size: clamp(32px, 4vw, 56px);
-  font-weight: 800;
-  color: var(--brand);
-}
-
-.home-helper{ margin: 8px 0 0; }
-.home-helper a{
-  display:inline-block;
-  padding: 8px 12px;
-  border-radius: 999px;
-  background: rgba(255,255,255,.65);
-  color: #0f172a;
-  text-decoration: none;
-  border: 1px solid rgba(15,23,42,.06);
-  transition: transform .15s ease, background .15s ease;
-}
-.home-helper a:hover{ transform: translateY(-1px); background: #fff; }
-
-.home-actions{
-  width: min(420px, 100%);
-  display: grid;
-  gap: 14px;
-  justify-self: end;
-}
-.home-card{
-  position: relative;
-  display: block;
-  padding: 18px 20px;
-  border-radius: 10px;
-  text-decoration: none;
-  font-weight: 700;
-  text-align: left;
-
-  background: rgba(5,10,18,.92);
-  color: #eef2f7;
-  border: 1px solid rgba(255,255,255,.06);
-  box-shadow: 0 12px 24px rgba(0,0,0,.22);
+  align-items: center;
+  justify-content: center;
+  padding: 20px 12px;
   overflow: hidden;
-  transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
-}
-.home-card::before{
-  content:"";
-  position:absolute; inset:0 auto 0 0;
-  width:6px;
-  background: var(--brand);
-  box-shadow: 0 0 0 1px rgba(255,255,255,.05) inset;
-}
-.home-card:hover{
-  transform: translateY(-2px);
-  background: rgba(7,14,24,.96);
-  box-shadow: 0 16px 28px rgba(0,0,0,.26), 0 0 0 6px rgba(15,111,236,.12);
 }
 
-@media (max-width: 980px){
-  .home-grid{
-    grid-template-columns: 1fr;
-    gap: 18px;
-    text-align: center;
-  }
-  .home-title{ align-items: center; }
-  .home-actions{ justify-self: center; width: 100%; }
-}
-
-.home-card:focus{
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(15,111,236,.45), 0 12px 24px rgba(0,0,0,.22);
-}
-
-@media (max-width:520px){
-  .foot .foot-wrap{ flex-direction: column; gap: 4px; }
-}
-
-/* === ESTILOS PARA A PÁGINA DO JOGO === */
-.game-container {
+/* === CARD GENÉRICO (Login, Jogo, Ranking, Documentos) === */
+.menu,
+.doc-card,
+.game-container,
+.is-ranking .container {
   width: min(900px, 92vw);
   display: flex;
   flex-direction: column;
   gap: 16px;
-  padding: 20px;
+  padding: 22px 20px;
   background: rgba(25, 39, 52, 0.45);
   border: 1px solid rgba(255, 255, 255, 0.45);
   border-radius: var(--radius);
   backdrop-filter: blur(8px) saturate(120%);
   color: #eef2f7;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+  max-height: calc(100vh - var(--header-h) - var(--footer-h) - 40px);
+  overflow-y: auto;
+}
+.menu {
+  width: min(var(--menu-w), 92vw);
+}
+
+/* Títulos dentro dos cards */
+.menu h1,
+.doc-card h1,
+.game-container h1,
+.page-title {
+  margin: 0 0 6px;
+  font-size: 24px;
+  color: #4fb9ff;
   text-align: center;
 }
-
-.game-container h1 {
-  margin: 0;
-  color: #4fb9ff;
-  text-transform: capitalize;
+.doc-card h2 {
+  margin: 18px 0 8px;
+  font-size: 18px;
+  color: #e9efff;
 }
 
-.guess-form {
+/* Links e Helpers dentro dos cards */
+.helper {
+  text-align: center;
+  font-size: 12.5px;
+  color: #dde5f1;
+}
+.helper a,
+.doc-card a,
+.checkbox a {
+  color: #87cefa;
+  text-decoration: none;
+}
+.helper a:hover,
+.doc-card a:hover,
+.checkbox a:hover {
+  text-decoration: underline;
+}
+
+/* === FORMULÁRIOS (Login, Jogo) === */
+.menu label {
   display: flex;
-  gap: 10px;
+  flex-direction: column;
+  gap: 6px;
 }
-
+.menu label span {
+  font-size: 12px;
+  opacity: 0.9;
+}
+.menu input,
 .guess-form input {
-  flex-grow: 1;
   height: 40px;
   border-radius: 10px;
   border: 1px solid rgba(15, 111, 236, 0.25);
@@ -370,14 +193,23 @@ body::before{
   color: #0f172a;
   padding: 8px 12px;
   outline: none;
-  transition: all .15s ease;
+  transition: all 0.15s ease;
 }
+.menu input::placeholder,
+.guess-form input::placeholder {
+  color: #6c7a93;
+}
+.menu input:hover,
+.guess-form input:hover {
+  background: rgba(173, 216, 230, 0.35);
+}
+.menu input:focus,
 .guess-form input:focus {
   border-color: #84c5ff;
   background: rgba(173, 216, 230, 0.45);
   box-shadow: 0 0 0 3px rgba(132, 197, 255, 0.35);
 }
-
+.menu button,
 .guess-form button {
   height: 40px;
   border-radius: 10px;
@@ -387,57 +219,207 @@ body::before{
   font-weight: 700;
   cursor: pointer;
   padding: 0 20px;
+  transition: transform 0.06s ease, background 0.15s ease, box-shadow 0.15s ease;
+}
+.menu button {
+  box-shadow: 0 6px 20px rgba(15, 111, 236, 0.35);
+}
+.menu button:hover,
+.guess-form button:hover {
+  background: var(--brand-600);
+}
+.menu button:active,
+.guess-form button:active {
+  transform: translateY(1px);
+}
+.guess-form {
+  display: flex;
+  gap: 10px;
+}
+.guess-form input {
+  flex-grow: 1;
 }
 
-.results-wrapper {
-  overflow-x: auto; /* Para rolagem em telas pequenas */
+/* Checkbox (Cadastro) */
+.checkbox {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  color: #dde5f1;
+}
+.checkbox input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  accent-color: var(--brand);
+}
+.checkbox span {
+  line-height: 1.4;
 }
 
-.results-grid {
+/* === HOME (Página Principal) === */
+.is-home .topbar .container {
+  padding: 0 20px;
+}
+.home-grid {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 28px;
+  align-items: center;
+  width: 100%;
+}
+.home-title {
+  margin: 0 0 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  line-height: 1.1;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  font-size: clamp(32px, 4vw, 56px);
+  color: var(--ink);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+}
+.home-username {
+  font-size: clamp(32px, 4vw, 56px);
+  font-weight: 800;
+  color: var(--brand);
+}
+.home-helper a {
+  display: inline-block;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.65);
+  color: #0f172a;
+  text-decoration: none;
+  border: 1px solid rgba(15, 23, 42, 0.06);
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+.home-helper a:hover {
+  transform: translateY(-1px);
+  background: #fff;
+}
+.home-actions {
+  width: min(420px, 100%);
+  display: grid;
+  gap: 14px;
+  justify-self: end;
+}
+.home-card {
+  position: relative;
+  display: block;
+  padding: 18px 20px;
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: 700;
+  text-align: left;
+  background: rgba(5, 10, 18, 0.92);
+  color: #eef2f7;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.22);
+  overflow: hidden;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+.home-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 6px;
+  background: var(--brand);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+}
+.home-card:hover {
+  transform: translateY(-2px);
+  background: rgba(7, 14, 24, 0.96);
+  box-shadow: 0 16px 28px rgba(0, 0, 0, 0.26),
+  0 0 0 6px rgba(15, 111, 236, 0.12);
+}
+.home-card:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(15, 111, 236, 0.45),
+  0 12px 24px rgba(0, 0, 0, 0.22);
+}
+
+/* === TABELA DE RESULTADOS (Jogo e Ranking) === */
+.results-wrapper,
+.ranking-table-container {
+  overflow-x: auto;
+}
+.results-grid,
+.ranking-table-container table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 10px;
   font-size: 14px;
+  color: #eef2f7;
 }
-
 .results-grid th,
-.results-grid td {
+.results-grid td,
+.ranking-table-container th,
+.ranking-table-container td {
   border: 1px solid rgba(255, 255, 255, 0.2);
   padding: 10px 12px;
   text-align: center;
   min-width: 100px;
 }
-
-.results-grid th {
+.results-grid th,
+.ranking-table-container th {
   background-color: rgba(0, 0, 0, 0.2);
   font-weight: 600;
+  color: #eef2f7;
 }
 
-/* CORES DAS PISTAS */
+/* Cores das pistas (Apenas Jogo) */
 .results-grid .correto {
-  background-color: #28a745; /* Verde */
+  background-color: #28a745;
   color: white;
 }
 .results-grid .parcial {
-  background-color: #ffc107; /* Amarelo */
+  background-color: #ffc107;
   color: #333;
 }
 .results-grid .incorreto {
-  background-color: #dc3545; /* Vermelho */
+  background-color: #dc3545;
   color: white;
 }
-
 #mensagem-final {
   font-size: 18px;
   font-weight: bold;
 }
 
-/* === ESTILOS PARA TEMA ESCURO === */
-html.dark-mode body {
-  background-color: black !important;
-  color: white !important;
+/* === RANKING (Filtros) === */
+.ranking-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 16px;
+}
+.filter-button {
+  height: 36px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: transparent;
+  color: #e0e0e0;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0 16px;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+.filter-button:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+.filter-button.active {
+  background: var(--brand);
+  border-color: var(--brand);
+  color: #fff;
 }
 
+/* === TEMA ESCURO === */
 html.dark-mode body {
   background-color: #1a1a1a;
   color: #e0e0e0;
@@ -445,31 +427,29 @@ html.dark-mode body {
 html.dark-mode body::before {
   opacity: 0.1;
 }
-
 html.dark-mode .topbar,
 html.dark-mode .foot {
   background: rgba(10, 10, 10, 0.7);
   border-color: rgba(255, 255, 255, 0.1);
   color: #cccccc;
 }
-
 html.dark-mode .foot .foot-links a {
   color: var(--brand);
 }
-
 html.dark-mode .doc-card,
 html.dark-mode .menu,
-html.dark-mode .game-container {
+html.dark-mode .game-container,
+html.dark-mode .is-ranking .container {
   background: rgba(40, 40, 40, 0.7);
   border-color: rgba(255, 255, 255, 0.2);
   color: #e0e0e0;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
 }
-
 html.dark-mode .doc-card h1,
 html.dark-mode .doc-card h2,
 html.dark-mode .menu h1,
-html.dark-mode .game-container h1 {
+html.dark-mode .game-container h1,
+html.dark-mode .page-title {
   color: #84c5ff;
 }
 html.dark-mode .doc-card a,
@@ -478,10 +458,8 @@ html.dark-mode .checkbox a,
 html.dark-mode .game-container .helper a {
   color: #90caf9;
 }
-
 html.dark-mode .menu input,
-html.dark-mode .guess-form input,
-html.dark-mode select {
+html.dark-mode .guess-form input {
   background: rgba(70, 70, 70, 0.5);
   border-color: rgba(255, 255, 255, 0.2);
   color: #e0e0e0;
@@ -491,18 +469,15 @@ html.dark-mode .guess-form input::placeholder {
   color: #999999;
 }
 html.dark-mode .menu input:focus,
-html.dark-mode .guess-form input:focus,
-html.dark-mode select:focus {
+html.dark-mode .guess-form input:focus {
   border-color: #84c5ff;
   background: rgba(90, 90, 90, 0.6);
   box-shadow: 0 0 0 3px rgba(132, 197, 255, 0.25);
 }
-html.dark-mode .checkbox input[type="checkbox"],
-html.dark-mode input[type="radio"] {
+html.dark-mode .checkbox input[type="checkbox"] {
   accent-color: #84c5ff;
 }
-html.dark-mode .checkbox span,
-html.dark-mode .theme-options label {
+html.dark-mode .checkbox span {
   color: #dde5f1;
 }
 html.dark-mode .menu button,
@@ -516,22 +491,70 @@ html.dark-mode .guess-form button:hover {
 }
 html.dark-mode .home-card {
   background: rgba(30, 30, 30, 0.92);
-  border-color: rgba(255,255,255,.1);
+  border-color: rgba(255, 255, 255, 0.1);
   color: #eef2f7;
-  box-shadow: 0 12px 24px rgba(0,0,0,.4);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
 }
 html.dark-mode .home-card:hover {
   background: rgba(40, 40, 40, 0.96);
-  box-shadow: 0 16px 28px rgba(0,0,0,.5), 0 0 0 6px rgba(13, 110, 253, 0.1);
+  box-shadow: 0 16px 28px rgba(0, 0, 0, 0.5), 0 0 0 6px rgba(13, 110, 253, 0.1);
 }
-
-html.dark-mode .results-grid th {
+/* Tabela de Jogo e Ranking em Modo Escuro */
+html.dark-mode .results-grid th,
+html.dark-mode .ranking-table-container th {
   background-color: rgba(255, 255, 255, 0.1);
   color: #f0f0f0;
 }
-html.dark-mode .results-grid td {
+html.dark-mode .results-grid td,
+html.dark-mode .ranking-table-container td {
   border-color: rgba(255, 255, 255, 0.15);
 }
 html.dark-mode .results-grid .parcial {
   color: #111;
+}
+/* Filtros do Ranking em Modo Escuro */
+html.dark-mode .filter-button {
+  border-color: rgba(255, 255, 255, 0.2);
+  color: #e0e0e0;
+}
+html.dark-mode .filter-button:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+html.dark-mode .filter-button.active {
+  background: var(--brand);
+  border-color: var(--brand);
+  color: #fff;
+}
+
+
+/* === MEDIA QUERIES (Responsivo) === */
+@media (max-width: 980px) {
+  .home-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+    text-align: center;
+  }
+  .home-title {
+    align-items: center;
+  }
+  .home-actions {
+    justify-self: center;
+    width: 100%;
+  }
+}
+@media (max-width: 520px) {
+  .brand img {
+    height: 40px; /* <-- MUDANÇA: Aumentado de 32px para 40px */
+  }
+  :root {
+    --header-h: 52px;
+    --menu-w: 460px;
+  }
+  .menu {
+    padding: 18px 16px;
+  }
+  .foot .foot-wrap {
+    flex-direction: column;
+    gap: 4px;
+  }
 }

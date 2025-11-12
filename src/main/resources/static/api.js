@@ -11,11 +11,6 @@ function showMessage(elementId, text, color) {
         msgElement.style.color = color;
     }
 }
-
-/**
- * Função para lidar com o login do usuário.
- * @param {Event} event - O evento de submit do formulário.
- */
 async function handleLogin(event) {
     event.preventDefault(); // Impede o recarregamento da página
 
@@ -24,7 +19,6 @@ async function handleLogin(event) {
     const senha = form.senha.value;
     const msgElementId = 'msg';
 
-    // Monta o objeto (DTO) que a API espera
     const loginData = {
         login: login,
         senha: senha,
@@ -40,14 +34,14 @@ async function handleLogin(event) {
         });
 
         if (response.ok) {
-            // Se a resposta for OK (status 200), o login foi bem-sucedido
             const usuario = await response.json();
-            // Salva o nome do usuário no localStorage para usar na home
-            localStorage.setItem('eduquizle_user', usuario.nome);
-            // Redireciona para a página principal
+
+            localStorage.setItem('eduquizle_user_login', usuario.login || login);
+            localStorage.setItem('eduquizle_user_nome', usuario.nome);
+
             window.location.href = 'home.html';
+
         } else {
-            // Se a resposta não for OK, trata como erro
             const errorData = await response.json();
             const errorMessage = typeof errorData === 'string' ? errorData : errorData.erro || 'Erro desconhecido.';
             showMessage(msgElementId, errorMessage, 'red');
@@ -56,11 +50,6 @@ async function handleLogin(event) {
         showMessage(msgElementId, 'Não foi possível conectar ao servidor. Tente novamente.', 'red');
     }
 }
-
-/**
- * Função para lidar com o cadastro de um novo usuário.
- * @param {Event} event - O evento de submit do formulário.
- */
 async function handleCadastro(event) {
     event.preventDefault(); // Impede o recarregamento da página
 

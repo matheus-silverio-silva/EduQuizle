@@ -4,10 +4,10 @@
   <script>
     (function() {
       const themeKey = 'eduquizle_tema';
-      const themeValue = localStorage.getItem(themeKey) || 'system'; // Pega o tema salvo ou usa 'system' como padrão
+      const themeValue = localStorage.getItem(themeKey) || 'system';
       const root = document.documentElement;
 
-      root.classList.remove('light-mode', 'dark-mode'); // Limpa classes anteriores
+      root.classList.remove('light-mode', 'dark-mode');
 
       let themeToApply = themeValue;
       if (themeValue === 'system') {
@@ -18,9 +18,8 @@
       if (themeToApply === 'dark') {
         root.classList.add('dark-mode');
       } else {
-        root.classList.add('light-mode'); // Ou não adicione se 'light' for o padrão sem classe
+        root.classList.add('light-mode');
       }
-      // Não precisa de console.log aqui para produção
     })();
   </script>
   <meta charset="utf-8" />
@@ -32,43 +31,27 @@
 </head>
 <body class="is-home">
 <header class="topbar" role="banner">
-  <div class="container">
-    <a class="brand" href="home.html" aria-label="EduQuizle">
-      <img src="Imagens/logo projeto.png" alt="EduQuizle">
-    </a>
-    <nav class="social" aria-label="Redes sociais">
-      <a href="#" aria-label="GitHub">GH</a>
-      <a href="#" aria-label="LinkedIn">in</a>
-    </nav>
-  </div>
 </header>
 
 <main class="stage home">
-  <div class="home-grid" style="grid-template-columns: 1fr; text-align: center;">
+  <div class="home-grid">
     <section class="home-hero">
       <h1 class="home-title">
-        <span>Desafio Livre</span>
+        <span>Desafio Diário</span>
       </h1>
-      <p class="helper home-helper">Escolha uma matéria para começar</p>
+      <p class="helper home-helper">O desafio do dia</p>
     </section>
 
     <nav class="home-actions">
-      <a class="home-card" href="jogo.html?materia=geografia">Geografia</a>
-      <a class="home-card" href="jogo.html?materia=historia">História</a>
-      <a class="home-card" href="jogo.html?materia=biologia">Biologia</a>
-      <a class="home-card" href="jogo.html?materia=quimica">Química</a>
+      <a class="home-card" href="jogo-diario.html?materia=geografia">Geografia</a>
+      <a class="home-card" href="jogo-diario.html?materia=historia">História</a>
+      <a class="home-card" href="jogo-diario.html?materia=biologia">Biologia</a>
+      <a class="home-card" href="jogo-diario.html?materia=quimica">Química</a>
     </nav>
   </div>
 </main>
 
 <footer class="foot" role="contentinfo">
-  <div class="foot-wrap">
-    <div class="foot-links">
-      <a href="politica.html">Política de Privacidade</a> ·
-      <a href="termos.html">Termos de Uso</a>
-    </div>
-    <small>© <span id="year"></span> EduQuizle</small>
-  </div>
 </footer>
 
 <script>

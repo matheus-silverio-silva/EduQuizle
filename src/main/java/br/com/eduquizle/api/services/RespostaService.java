@@ -71,7 +71,6 @@ public class RespostaService {
         if (bioOpt.isPresent()) return bioOpt;
 
         Optional<Quimica> quimOpt = quimicaRepository.findById(id);
-        // Sem if/else no último, apenas retorna o Optional (pode estar vazio)
         return quimOpt;
     }
 
@@ -89,7 +88,7 @@ public class RespostaService {
         } else if ("quimica".equals(materiaLower)) {
             return quimicaRepository;
         } else {
-            return null; // Matéria desconhecida
+            return null;
         }
     }
 }

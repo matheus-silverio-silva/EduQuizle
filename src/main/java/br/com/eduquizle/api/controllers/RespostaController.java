@@ -20,11 +20,8 @@ public class RespostaController {
     private RespostaService respostaService;
 
     @GetMapping("/nomes")
-    public ResponseEntity<List<String>> getListaNomesPorMateria(@RequestParam String materia) {
+    public ResponseEntity<List<String>> getNomesPorMateria(@RequestParam String materia) {
         List<String> nomes = respostaService.getAllNomesByMateria(materia);
-        if (respostaService.getRepositoryByMateria(materia) == null && nomes.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
         return ResponseEntity.ok(nomes);
     }
 

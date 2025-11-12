@@ -1,38 +1,76 @@
 package br.com.eduquizle.api.utils;
 
-import br.com.eduquizle.api.entidades.Biologia;
-import br.com.eduquizle.api.entidades.Geografia;
-import br.com.eduquizle.api.entidades.Historia;
-import br.com.eduquizle.api.entidades.Quimica;
-import br.com.eduquizle.api.entidades.Resposta;
+import br.com.eduquizle.api.dto.DesafioDiarioDTO;
+import br.com.eduquizle.api.entidades.*;
 import br.com.eduquizle.api.entidades.enums.*;
-import br.com.eduquizle.api.repositorios.BiologiaRepository;
-import br.com.eduquizle.api.repositorios.GeografiaRepository;
-import br.com.eduquizle.api.repositorios.HistoriaRepository;
-import br.com.eduquizle.api.repositorios.QuimicaRepository;
+import br.com.eduquizle.api.repositorios.*;
+import br.com.eduquizle.api.services.DesafioDiarioService;
+import br.com.eduquizle.api.services.RespostaService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
+import java.util.Optional;
 import java.util.function.Function;
 
 @Component
 public class DataLoader implements CommandLineRunner {
 
+    private static final Logger log = LoggerFactory.getLogger(DataLoader.class);
+
+    // Repositórios das Matérias
     @Autowired private GeografiaRepository geografiaRepository;
     @Autowired private QuimicaRepository quimicaRepository;
     @Autowired private BiologiaRepository biologiaRepository;
     @Autowired private HistoriaRepository historiaRepository;
 
+    // Repositórios e Serviços de Usuário/Desafio
+    @Autowired private UsuarioRepository usuarioRepository;
+    @Autowired private RankingUsuarioRepository rankingRepository;
+    @Autowired private DesafioDiarioService desafioDiarioService;
+    @Autowired private RespostaService respostaService;
+
+    /**
+     * Método principal que roda quando o Spring inicia.
+     * Marcado como @Transactional para garantir que tudo rode em uma única transação.
+     */
     @Override
+    @Transactional
     public void run(String... args) throws Exception {
 
+        // --- 1. CARREGAR DADOS DAS MATÉRIAS (CSVs) ---
+        log.info("--- INICIANDO DATA LOADER (MATÉRIAS) ---");
+        carregarTodosOsCSVs();
+        log.info("--- DATA LOADER (MATÉRIAS) FINALIZADO ---");
+
+        // --- 2. POPULAR USUÁRIOS E RANKINGS ---
+        log.info("--- INICIANDO DATA LOADER (USUÁRIOS E RANKING) ---");
+        popularUsuariosEHighscores();
+        log.info("--- DATA LOADER (USUÁRIOS E RANKING) FINALIZADO ---");
+
+        // --- 3. POPULAR DESAFIOS DIÁRIOS ---
+        log.info("--- INICIANDO DATA LOADER (DESAFIOS DIÁRIOS) ---");
+        // Cria desafios para ontem, hoje e amanhã (para teste)
+        popularDesafiosDiarios(LocalDate.now().minusDays(1)); // Ontem
+        popularDesafiosDiarios(LocalDate.now()); // Hoje
+        popularDesafiosDiarios(LocalDate.now().plusDays(1)); // Amanhã
+        log.info("--- DATA LOADER (DESAFIOS DIÁRIOS) FINALIZADO ---");
+    }
+
+    /**
+     * Agrupa todas as chamadas de carregamento de CSV.
+     */
+    private void carregarTodosOsCSVs() {
         Function<String[], Geografia> mapeadorGeografia = (dados) -> {
             Geografia g = new Geografia();
             g.setNome(dados[0]);
@@ -44,7 +82,7 @@ public class DataLoader implements CommandLineRunner {
             g.setPopulacaoAprox(Long.parseLong(dados[6]));
             return g;
         };
-        carregarDadosGenericos("/data/geografia.csv", geografiaRepository, mapeadorGeografia);
+        carregarDadosGenericos("/data/geografia.csv", geografiaRepository, mapeadorGeografia, 7);
 
         Function<String[], Quimica> mapeadorQuimica = (dados) -> {
             Quimica q = new Quimica();
@@ -58,7 +96,7 @@ public class DataLoader implements CommandLineRunner {
             q.setMassaAtomica(new BigDecimal(dados[7]));
             return q;
         };
-        carregarDadosGenericos("/data/quimica.csv", quimicaRepository, mapeadorQuimica);
+        carregarDadosGenericos("/data/quimica.csv", quimicaRepository, mapeadorQuimica, 8);
 
         Function<String[], Biologia> mapeadorBiologia = (dados) -> {
             Biologia b = new Biologia();
@@ -70,7 +108,7 @@ public class DataLoader implements CommandLineRunner {
             b.setAlimentacao(Alimentacao.valueOf(dados[5]));
             return b;
         };
-        carregarDadosGenericos("/data/biologia.csv", biologiaRepository, mapeadorBiologia);
+        carregarDadosGenericos("/data/biologia.csv", biologiaRepository, mapeadorBiologia, 6);
 
         Function<String[], Historia> mapeadorHistoria = (dados) -> {
             Historia h = new Historia();
@@ -82,32 +120,132 @@ public class DataLoader implements CommandLineRunner {
             h.setTema(TemaHistorico.valueOf(dados[5]));
             return h;
         };
-        carregarDadosGenericos("/data/historia.csv", historiaRepository, mapeadorHistoria);
+        carregarDadosGenericos("/data/historia.csv", historiaRepository, mapeadorHistoria, 6);
     }
 
-    private <T extends Resposta> void carregarDadosGenericos(String caminhoArquivo, JpaRepository<T, ?> repository, Function<String[], T> mapeador) {
+    /**
+     * Método genérico para carregar dados de um arquivo CSV.
+     */
+    private <T extends Resposta> void carregarDadosGenericos(String caminhoArquivo, JpaRepository<T, Integer> repository, Function<String[], T> mapeador, int numCampos) {
         if (repository.count() > 0) {
-            System.out.println(">>> Dados para " + caminhoArquivo + " já carregados. Pulando.");
+            log.info(">>> Dados para {} já carregados. Pulando.", caminhoArquivo);
             return;
         }
 
-        System.out.println(">>> Carregando dados de " + caminhoArquivo + "...");
+        log.info(">>> Carregando dados de {}...", caminhoArquivo);
         String linha = "";
-        String separador = ",";
+        String separador = ","; // Assume que seu CSV usa vírgula
 
         try (InputStream is = getClass().getResourceAsStream(caminhoArquivo);
              BufferedReader br = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
 
-            br.readLine();
+            br.readLine(); // Pula o cabeçalho
 
             while ((linha = br.readLine()) != null) {
+                // Remove aspas, se houver
+                linha = linha.replaceAll("\"", "");
                 String[] dados = linha.split(separador, -1);
-                T entidade = mapeador.apply(dados);
-                repository.save(entidade);
+
+                if (dados.length >= numCampos) {
+                    try {
+                        T entidade = mapeador.apply(dados);
+                        repository.save(entidade);
+                    } catch (Exception e) {
+                        log.warn("Erro ao processar linha: [{}]. Erro: {}", linha, e.getMessage());
+                    }
+                } else {
+                    log.warn("Linha mal formatada pulada: [{}]", linha);
+                }
             }
         } catch (Exception e) {
-            System.err.println("Erro ao carregar dados de " + caminhoArquivo + ": " + e.getMessage());
+            log.error("Erro ao carregar dados de " + caminhoArquivo + ": " + e.getMessage());
             e.printStackTrace();
+        }
+    }
+
+    /**
+     * (Corrigido) Cria usuários e rankings na ordem correta.
+     */
+    private void popularUsuariosEHighscores() {
+        log.info("Verificando usuários e rankings de teste...");
+
+        criarUsuarioComRankingSeNaoExistir("aluno1", "Aluno Um", "aluno1@email.com", "senha123", 150L, 100L, 50L, 0L, 0L);
+        criarUsuarioComRankingSeNaoExistir("jogador2", "Jogador Dois", "jogador2@email.com", "senha123", 250L, 0L, 50L, 200L, 0L);
+        criarUsuarioComRankingSeNaoExistir("teste", "Usuário Teste", "teste@email.com", "senha123", 100L, 100L, 0L, 0L, 0L);
+    }
+
+    /**
+     * (Corrigido) Método auxiliar para criar usuário e ranking
+     */
+    private void criarUsuarioComRankingSeNaoExistir(String login, String nome, String email, String senha,
+                                                    Long pTotal, Long pGeo, Long pHist, Long pBio, Long pQuim) {
+
+        Optional<Usuario> userOpt = usuarioRepository.findByLogin(login);
+        if (userOpt.isPresent()) {
+            log.info(">>> Usuário '{}' já existe. Pulando criação.", login);
+            return; // Sai da função se o usuário já existe
+        }
+
+        try {
+            // 1. Cria o Usuário (sem ranking)
+            Usuario novoUsuario = new Usuario();
+            novoUsuario.setLogin(login);
+            novoUsuario.setNome(nome);
+            novoUsuario.setEmail(email);
+            novoUsuario.setSenha(senha); // (Lembre-se de criptografar no deploy real)
+
+            // 2. SALVA o usuário primeiro (ele precisa de um ID)
+            Usuario usuarioSalvo = usuarioRepository.save(novoUsuario);
+
+            // 3. Cria o Ranking (com ID nulo)
+            RankingUsuario novoRanking = new RankingUsuario(usuarioSalvo); // (Usa o construtor corrigido)
+            novoRanking.setPontuacaoTotal(pTotal);
+            novoRanking.setPontuacaoGeografia(pGeo);
+            novoRanking.setPontuacaoHistoria(pHist);
+            novoRanking.setPontuacaoBiologia(pBio);
+            novoRanking.setPontuacaoQuimica(pQuim);
+
+            // 4. SALVA o ranking separadamente
+            // Como o 'usuarioSalvo' já existe no banco, o @MapsId vai funcionar
+            rankingRepository.save(novoRanking);
+
+            log.info(">>> Usuário '{}' e seu ranking criados com sucesso.", login);
+
+        } catch (Exception e) {
+            log.error(">>> ERRO ao criar usuário '{}': {}", login, e.getMessage(), e);
+        }
+    }
+
+    /**
+     * (Correto) Cria os 4 desafios diários
+     */
+    private void popularDesafiosDiarios(LocalDate data) {
+        log.info("Verificando desafios diários para a data: {}", data);
+
+        for (Materia materia : Materia.values()) {
+            try {
+                // 1. Pega uma resposta aleatória (requer que os CSVs já estejam carregados!)
+                Optional<? extends Resposta> respostaOpt = respostaService.getRandomRespostaByMateria(materia.name());
+
+                if (respostaOpt.isEmpty()) {
+                    log.warn(">>> [DESAFIO] Nenhuma resposta de {} encontrada. Não é possível criar desafio.", materia);
+                    continue;
+                }
+
+                Resposta respostaAleatoria = respostaOpt.get();
+                Integer respostaId = respostaAleatoria.getId_resposta();
+                DesafioDiarioDTO dto = new DesafioDiarioDTO(data, materia, respostaId);
+
+                // 3. Tenta salvar (o service já tem a trava anti-duplicata)
+                desafioDiarioService.criarDesafio(dto);
+                log.info(">>> SUCESSO: Desafio de {} para {} criado.", materia, data);
+
+            } catch (IllegalStateException e) {
+                // Isso é esperado! Significa que o desafio já existe.
+                log.info(">>> INFO: Desafio de {} para {} já existe. Pulando.", materia, data);
+            } catch (Exception e) {
+                log.error(">>> ERRO INESPERADO ao criar desafio de {}: {}", materia, e.getMessage());
+            }
         }
     }
 }

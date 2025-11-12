@@ -5,7 +5,6 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class ComparacaoRequestDTO {
+public class ComparacaoDiarioDTO {
     private String palpite;
-    private Integer respostaId;
 }

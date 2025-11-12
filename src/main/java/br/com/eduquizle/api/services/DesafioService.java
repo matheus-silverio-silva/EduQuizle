@@ -31,7 +31,7 @@ public class DesafioService {
         return new DesafioInicioDTO(resposta.getId_resposta(), cabecalhos);
     }
 
-    private List<String> determinarCabecalhos(String materia) {
+    public List<String> determinarCabecalhos(String materia) {
         return switch (materia.toLowerCase()) {
             case "geografia" -> List.of("Palpite", "Continente", "Sub-Região", "Capital", "Idioma", "Moeda", "População");
             case "historia" -> List.of("Palpite", "Ano", "País/Região", "Figura Chave", "Período", "Tema");

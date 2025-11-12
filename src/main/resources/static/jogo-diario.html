@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <script>
+        (function() {
+            const themeKey = 'eduquizle_tema';
+            const themeValue = localStorage.getItem(themeKey) || 'system';
+            const root = document.documentElement;
+
+            root.classList.remove('light-mode', 'dark-mode');
+
+            let themeToApply = themeValue;
+            if (themeValue === 'system') {
+                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                themeToApply = prefersDark ? 'dark' : 'light';
+            }
+
+            if (themeToApply === 'dark') {
+                root.classList.add('dark-mode');
+            } else {
+                root.classList.add('light-mode');
+            }
+        })();
+    </script>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>EduQuizle — Desafio Diário</title>
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+<header class="topbar" role="banner">
+    <div class="container">
+        <a class="brand" href="home.html" aria-label="EduQuizle">
+            <img src="Imagens/logo projeto.png" alt="EduQuizle">
+        </a>
+        <nav class="social" aria-label="Redes sociais">
+            <a href="#" aria-label="GitHub">GH</a>
+            <a href="#" aria-label="LinkedIn">in</a>
+        </nav>
+    </div>
+</header>
+
+<main class="stage" role="main">
+    <div class="game-container">
+        <h1 id="titulo-materia">Carregando Desafio...</h1>
+
+        <form class="guess-form">
+            <input type="text" id="palpite-input" list="sugestoes" placeholder="Digite seu palpite..." required autocomplete="off">
+            <datalist id="sugestoes"></datalist>
+            <button type="submit">Adivinhar</button>
+        </form>
+
+        <p class="helper">
+            <a href="regras.html" target="_blank">Ver Regras</a> |
+            Tentativas: <span id="tentativas">0</span>/8
+        </p>
+
+        <div class="results-wrapper">
+            <table class="results-grid">
+                <thead id="grid-cabecalho">
+                </thead>
+                <tbody id="grid-resultados">
+                </tbody>
+            </table>
+            <p id="mensagem-final" class="helper"></p>
+        </div>
+    </div>
+</main>
+
+<footer class="foot" role="contentinfo">
+    <div class="foot-wrap">
+        <span>© <span id="year"></span> EduQuizle</span>
+    </div>
+</footer>
+
+<script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+
+<script src="jogo-diario.js"></script>
+
+</body>
+</html>
