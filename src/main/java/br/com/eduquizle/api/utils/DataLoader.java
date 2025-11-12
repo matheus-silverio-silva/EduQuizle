@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -28,48 +27,34 @@ public class DataLoader implements CommandLineRunner {
 
     private static final Logger log = LoggerFactory.getLogger(DataLoader.class);
 
-    // Repositórios das Matérias
     @Autowired private GeografiaRepository geografiaRepository;
     @Autowired private QuimicaRepository quimicaRepository;
     @Autowired private BiologiaRepository biologiaRepository;
     @Autowired private HistoriaRepository historiaRepository;
 
-    // Repositórios e Serviços de Usuário/Desafio
     @Autowired private UsuarioRepository usuarioRepository;
     @Autowired private RankingUsuarioRepository rankingRepository;
     @Autowired private DesafioDiarioService desafioDiarioService;
     @Autowired private RespostaService respostaService;
 
-    /**
-     * Método principal que roda quando o Spring inicia.
-     * Marcado como @Transactional para garantir que tudo rode em uma única transação.
-     */
     @Override
-    @Transactional
     public void run(String... args) throws Exception {
 
-        // --- 1. CARREGAR DADOS DAS MATÉRIAS (CSVs) ---
         log.info("--- INICIANDO DATA LOADER (MATÉRIAS) ---");
         carregarTodosOsCSVs();
         log.info("--- DATA LOADER (MATÉRIAS) FINALIZADO ---");
 
-        // --- 2. POPULAR USUÁRIOS E RANKINGS ---
         log.info("--- INICIANDO DATA LOADER (USUÁRIOS E RANKING) ---");
         popularUsuariosEHighscores();
         log.info("--- DATA LOADER (USUÁRIOS E RANKING) FINALIZADO ---");
 
-        // --- 3. POPULAR DESAFIOS DIÁRIOS ---
         log.info("--- INICIANDO DATA LOADER (DESAFIOS DIÁRIOS) ---");
-        // Cria desafios para ontem, hoje e amanhã (para teste)
-        popularDesafiosDiarios(LocalDate.now().minusDays(1)); // Ontem
-        popularDesafiosDiarios(LocalDate.now()); // Hoje
-        popularDesafiosDiarios(LocalDate.now().plusDays(1)); // Amanhã
+        popularDesafiosDiarios(LocalDate.now().minusDays(1));
+        popularDesafiosDiarios(LocalDate.now());
+        popularDesafiosDiarios(LocalDate.now().plusDays(1));
         log.info("--- DATA LOADER (DESAFIOS DIÁRIOS) FINALIZADO ---");
     }
 
-    /**
-     * Agrupa todas as chamadas de carregamento de CSV.
-     */
     private void carregarTodosOsCSVs() {
         Function<String[], Geografia> mapeadorGeografia = (dados) -> {
             Geografia g = new Geografia();
@@ -123,9 +108,6 @@ public class DataLoader implements CommandLineRunner {
         carregarDadosGenericos("/data/historia.csv", historiaRepository, mapeadorHistoria, 6);
     }
 
-    /**
-     * Método genérico para carregar dados de um arquivo CSV.
-     */
     private <T extends Resposta> void carregarDadosGenericos(String caminhoArquivo, JpaRepository<T, Integer> repository, Function<String[], T> mapeador, int numCampos) {
         if (repository.count() > 0) {
             log.info(">>> Dados para {} já carregados. Pulando.", caminhoArquivo);
@@ -134,15 +116,14 @@ public class DataLoader implements CommandLineRunner {
 
         log.info(">>> Carregando dados de {}...", caminhoArquivo);
         String linha = "";
-        String separador = ","; // Assume que seu CSV usa vírgula
+        String separador = ",";
 
         try (InputStream is = getClass().getResourceAsStream(caminhoArquivo);
              BufferedReader br = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
 
-            br.readLine(); // Pula o cabeçalho
+            br.readLine();
 
             while ((linha = br.readLine()) != null) {
-                // Remove aspas, se houver
                 linha = linha.replaceAll("\"", "");
                 String[] dados = linha.split(separador, -1);
 
@@ -163,9 +144,6 @@ public class DataLoader implements CommandLineRunner {
         }
     }
 
-    /**
-     * (Corrigido) Cria usuários e rankings na ordem correta.
-     */
     private void popularUsuariosEHighscores() {
         log.info("Verificando usuários e rankings de teste...");
 
@@ -174,39 +152,31 @@ public class DataLoader implements CommandLineRunner {
         criarUsuarioComRankingSeNaoExistir("teste", "Usuário Teste", "teste@email.com", "senha123", 100L, 100L, 0L, 0L, 0L);
     }
 
-    /**
-     * (Corrigido) Método auxiliar para criar usuário e ranking
-     */
     private void criarUsuarioComRankingSeNaoExistir(String login, String nome, String email, String senha,
                                                     Long pTotal, Long pGeo, Long pHist, Long pBio, Long pQuim) {
 
         Optional<Usuario> userOpt = usuarioRepository.findByLogin(login);
         if (userOpt.isPresent()) {
             log.info(">>> Usuário '{}' já existe. Pulando criação.", login);
-            return; // Sai da função se o usuário já existe
+            return;
         }
 
         try {
-            // 1. Cria o Usuário (sem ranking)
             Usuario novoUsuario = new Usuario();
             novoUsuario.setLogin(login);
             novoUsuario.setNome(nome);
             novoUsuario.setEmail(email);
-            novoUsuario.setSenha(senha); // (Lembre-se de criptografar no deploy real)
+            novoUsuario.setSenha(senha);
 
-            // 2. SALVA o usuário primeiro (ele precisa de um ID)
             Usuario usuarioSalvo = usuarioRepository.save(novoUsuario);
 
-            // 3. Cria o Ranking (com ID nulo)
-            RankingUsuario novoRanking = new RankingUsuario(usuarioSalvo); // (Usa o construtor corrigido)
+            RankingUsuario novoRanking = new RankingUsuario(usuarioSalvo);
             novoRanking.setPontuacaoTotal(pTotal);
             novoRanking.setPontuacaoGeografia(pGeo);
             novoRanking.setPontuacaoHistoria(pHist);
             novoRanking.setPontuacaoBiologia(pBio);
             novoRanking.setPontuacaoQuimica(pQuim);
 
-            // 4. SALVA o ranking separadamente
-            // Como o 'usuarioSalvo' já existe no banco, o @MapsId vai funcionar
             rankingRepository.save(novoRanking);
 
             log.info(">>> Usuário '{}' e seu ranking criados com sucesso.", login);
@@ -216,15 +186,11 @@ public class DataLoader implements CommandLineRunner {
         }
     }
 
-    /**
-     * (Correto) Cria os 4 desafios diários
-     */
     private void popularDesafiosDiarios(LocalDate data) {
         log.info("Verificando desafios diários para a data: {}", data);
 
         for (Materia materia : Materia.values()) {
             try {
-                // 1. Pega uma resposta aleatória (requer que os CSVs já estejam carregados!)
                 Optional<? extends Resposta> respostaOpt = respostaService.getRandomRespostaByMateria(materia.name());
 
                 if (respostaOpt.isEmpty()) {
@@ -236,12 +202,10 @@ public class DataLoader implements CommandLineRunner {
                 Integer respostaId = respostaAleatoria.getId_resposta();
                 DesafioDiarioDTO dto = new DesafioDiarioDTO(data, materia, respostaId);
 
-                // 3. Tenta salvar (o service já tem a trava anti-duplicata)
                 desafioDiarioService.criarDesafio(dto);
                 log.info(">>> SUCESSO: Desafio de {} para {} criado.", materia, data);
 
             } catch (IllegalStateException e) {
-                // Isso é esperado! Significa que o desafio já existe.
                 log.info(">>> INFO: Desafio de {} para {} já existe. Pulando.", materia, data);
             } catch (Exception e) {
                 log.error(">>> ERRO INESPERADO ao criar desafio de {}: {}", materia, e.getMessage());
