@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -27,31 +28,37 @@ public class DataLoader implements CommandLineRunner {
 
     private static final Logger log = LoggerFactory.getLogger(DataLoader.class);
 
+    // Repositórios das Matérias
     @Autowired private GeografiaRepository geografiaRepository;
     @Autowired private QuimicaRepository quimicaRepository;
     @Autowired private BiologiaRepository biologiaRepository;
     @Autowired private HistoriaRepository historiaRepository;
 
+    // Repositórios e Serviços de Usuário/Desafio
     @Autowired private UsuarioRepository usuarioRepository;
     @Autowired private RankingUsuarioRepository rankingRepository;
     @Autowired private DesafioDiarioService desafioDiarioService;
     @Autowired private RespostaService respostaService;
 
     @Override
+    @Transactional
     public void run(String... args) throws Exception {
 
+        // --- 1. CARREGAR DADOS DAS MATÉRIAS (CSVs) ---
         log.info("--- INICIANDO DATA LOADER (MATÉRIAS) ---");
         carregarTodosOsCSVs();
         log.info("--- DATA LOADER (MATÉRIAS) FINALIZADO ---");
 
+        // --- 2. POPULAR USUÁRIOS E RANKINGS ---
         log.info("--- INICIANDO DATA LOADER (USUÁRIOS E RANKING) ---");
         popularUsuariosEHighscores();
         log.info("--- DATA LOADER (USUÁRIOS E RANKING) FINALIZADO ---");
 
+        // --- 3. POPULAR DESAFIOS DIÁRIOS ---
         log.info("--- INICIANDO DATA LOADER (DESAFIOS DIÁRIOS) ---");
-        popularDesafiosDiarios(LocalDate.now().minusDays(1));
-        popularDesafiosDiarios(LocalDate.now());
-        popularDesafiosDiarios(LocalDate.now().plusDays(1));
+                popularDesafiosDiarios(LocalDate.now().minusDays(1)); // Ontem
+        popularDesafiosDiarios(LocalDate.now()); // Hoje
+        popularDesafiosDiarios(LocalDate.now().plusDays(1)); // Amanhã
         log.info("--- DATA LOADER (DESAFIOS DIÁRIOS) FINALIZADO ---");
     }
 
@@ -121,7 +128,7 @@ public class DataLoader implements CommandLineRunner {
         try (InputStream is = getClass().getResourceAsStream(caminhoArquivo);
              BufferedReader br = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
 
-            br.readLine();
+            br.readLine(); // Pula o cabeçalho
 
             while ((linha = br.readLine()) != null) {
                 linha = linha.replaceAll("\"", "");
@@ -144,14 +151,41 @@ public class DataLoader implements CommandLineRunner {
         }
     }
 
+    /**
+     * Popula o banco com 20 usuários de teste e seus respectivos rankings.
+     */
     private void popularUsuariosEHighscores() {
         log.info("Verificando usuários e rankings de teste...");
 
-        criarUsuarioComRankingSeNaoExistir("aluno1", "Aluno Um", "aluno1@email.com", "senha123", 150L, 100L, 50L, 0L, 0L);
+        // 3 Usuários originais
+        criarUsuarioComRankingSeNaoExistir("aluno1", "Aluno Um", "aluno1@email.com", "senha123", 300L, 150L, 100L, 50L, 0L);
         criarUsuarioComRankingSeNaoExistir("jogador2", "Jogador Dois", "jogador2@email.com", "senha123", 250L, 0L, 50L, 200L, 0L);
         criarUsuarioComRankingSeNaoExistir("teste", "Usuário Teste", "teste@email.com", "senha123", 100L, 100L, 0L, 0L, 0L);
+
+        // --- 17 NOVOS USUÁRIOS ---
+        criarUsuarioComRankingSeNaoExistir("quiz.champ", "Sofia Guedes", "sofia@email.com", "senha123", 400L, 100L, 100L, 100L, 100L);
+        criarUsuarioComRankingSeNaoExistir("geo.expert", "Lucas Mendes", "lucas@email.com", "senha123", 350L, 350L, 0L, 0L, 0L);
+        criarUsuarioComRankingSeNaoExistir("quimica.master", "Ana Julia", "ana@email.com", "senha123", 300L, 0L, 0L, 0L, 300L);
+        criarUsuarioComRankingSeNaoExistir("hist.fan", "Maria Clara", "maria@email.com", "senha123", 250L, 100L, 150L, 0L, 0L);
+        criarUsuarioComRankingSeNaoExistir("imperador", "Rafael Barros", "rafael@email.com", "senha123", 250L, 50L, 200L, 0L, 0L);
+        criarUsuarioComRankingSeNaoExistir("dna.expert", "Laura Bastos", "laura@email.com", "senha123", 220L, 0L, 0L, 220L, 0L);
+        criarUsuarioComRankingSeNaoExistir("celula", "Beatriz Faria", "bia@email.com", "senha123", 200L, 100L, 0L, 100L, 0L);
+        criarUsuarioComRankingSeNaoExistir("bio.lover", "Pedro Alves", "pedro@email.com", "senha123", 200L, 80L, 0L, 120L, 0L);
+        criarUsuarioComRankingSeNaoExistir("mapa.mundi", "Gabriel Rocha", "gabriel@email.com", "senha123", 180L, 180L, 0L, 0L, 0L);
+        criarUsuarioComRankingSeNaoExistir("sara.lima", "Sara Lima", "sara@email.com", "senha123", 170L, 120L, 50L, 0L, 0L);
+        criarUsuarioComRankingSeNaoExistir("atomico", "Enzo Pereira", "enzo@email.com", "senha123", 130L, 0L, 0L, 0L, 130L);
+        criarUsuarioComRankingSeNaoExistir("ph.sete", "Manuela Dias", "manu@email.com", "senha123", 100L, 0L, 0L, 50L, 50L);
+        criarUsuarioComRankingSeNaoExistir("nerd.brasil", "Davi Moreira", "davi@email.com", "senha123", 100L, 0L, 0L, 50L, 50L);
+        criarUsuarioComRankingSeNaoExistir("prof.virtual", "Julia Sampaio", "julia@email.com", "senha1Y23", 90L, 0L, 90L, 0L, 0L);
+        criarUsuarioComRankingSeNaoExistir("big.bang", "Felipe Matos", "felipe@email.com", "senha123", 80L, 0L, 40L, 0L, 40L);
+        criarUsuarioComRankingSeNaoExistir("curioso", "Isabela Neves", "isabela@email.com", "senha123", 40L, 10L, 10L, 10L, 10L);
+        criarUsuarioComRankingSeNaoExistir("novato", "Carlos Silva", "carlos@email.com", "senha123", 0L, 0L, 0L, 0L, 0L);
     }
 
+    /**
+     * (VERSÃO CORRIGIDA) Método auxiliar para criar usuário e ranking
+     * Isso previne o erro 'detached entity'.
+     */
     private void criarUsuarioComRankingSeNaoExistir(String login, String nome, String email, String senha,
                                                     Long pTotal, Long pGeo, Long pHist, Long pBio, Long pQuim) {
 
@@ -162,21 +196,28 @@ public class DataLoader implements CommandLineRunner {
         }
 
         try {
+            // 1. Cria o Usuário (NÃO SALVA)
             Usuario novoUsuario = new Usuario();
             novoUsuario.setLogin(login);
             novoUsuario.setNome(nome);
             novoUsuario.setEmail(email);
             novoUsuario.setSenha(senha);
 
-            Usuario usuarioSalvo = usuarioRepository.save(novoUsuario);
-
-            RankingUsuario novoRanking = new RankingUsuario(usuarioSalvo);
+            // 2. Cria o Ranking (NÃO SALVA)
+            RankingUsuario novoRanking = new RankingUsuario();
             novoRanking.setPontuacaoTotal(pTotal);
             novoRanking.setPontuacaoGeografia(pGeo);
             novoRanking.setPontuacaoHistoria(pHist);
             novoRanking.setPontuacaoBiologia(pBio);
             novoRanking.setPontuacaoQuimica(pQuim);
 
+            // 3. ASSOCIA os dois
+            novoRanking.setUsuario(novoUsuario);
+            // (Assumindo que RankingUsuario tem @OneToOne(cascade = CascadeType.ALL)
+            // e é o "dono" da relação, ou que @MapsId está configurado)
+
+            // 4. SALVA APENAS O RANKING
+            // O Cascade deve cuidar de salvar o 'novoUsuario' junto.
             rankingRepository.save(novoRanking);
 
             log.info(">>> Usuário '{}' e seu ranking criados com sucesso.", login);

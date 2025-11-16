@@ -2,6 +2,7 @@
 <html lang="pt-BR">
 <head>
   <script>
+    // Script de tema (light/dark mode)
     (function() {
       const themeKey = 'eduquizle_tema';
       const themeValue = localStorage.getItem(themeKey) || 'system';
@@ -42,11 +43,13 @@
   </div>
 </header>
 
-<main class="stage ranking" class="is-ranking">
+<!-- CORREÇÃO AQUI: As classes "stage", "ranking" e "is-ranking" foram unidas em um único atributo 'class' -->
+<main class="stage ranking is-ranking">
   <div class="container">
     <h1 class="page-title">🏆 Ranking</h1>
 
     <nav class="ranking-filters" aria-label="Filtros do Ranking">
+      <!-- Os data-materia já estão corretos (maiúsculos) -->
       <button class="filter-button active" data-materia="GERAL">Geral</button>
       <button class="filter-button" data-materia="GEOGRAFIA">Geografia</button>
       <button class="filter-button" data-materia="HISTORIA">História</button>
@@ -64,6 +67,7 @@
         </tr>
         </thead>
         <tbody id="ranking-table-body">
+        <!-- O JS vai popular esta área -->
         </tbody>
       </table>
       <p id="ranking-message">Carregando ranking...</p>
@@ -85,6 +89,7 @@
 <script>
   document.getElementById('year').textContent = new Date().getFullYear();
 </script>
+<!-- O ranking.js é carregado aqui -->
 <script src="ranking.js" defer></script>
 </body>
 </html>

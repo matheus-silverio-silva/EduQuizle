@@ -11,13 +11,17 @@ function showMessage(elementId, text, color) {
         msgElement.style.color = color;
     }
 }
+
+/**
+ * Lida com a submissão do formulário de login.
+ */
 async function handleLogin(event) {
     event.preventDefault(); // Impede o recarregamento da página
 
     const form = event.target;
     const login = form.login.value;
     const senha = form.senha.value;
-    const msgElementId = 'msg';
+    const msgElementId = 'msg'; // ID do elemento de mensagem no form
 
     const loginData = {
         login: login,
@@ -36,29 +40,46 @@ async function handleLogin(event) {
         if (response.ok) {
             const usuario = await response.json();
 
+            // Salva os dados do usuário no localStorage
             localStorage.setItem('eduquizle_user_login', usuario.login || login);
-            localStorage.setItem('eduquizle_user_nome', usuario.nome);
 
+            // --- CORREÇÃO AQUI ---
+            // A chave deve ser 'eduquizle_user' para ser lida corretamente pela home.html
+            localStorage.setItem('eduquizle_user', usuario.nome);
+            // ---------------------
+
+            // Redireciona para a home
             window.location.href = 'home.html';
 
         } else {
+            // Trata erros de login (ex: senha errada)
             const errorData = await response.json();
-            const errorMessage = typeof errorData === 'string' ? errorData : errorData.erro || 'Erro desconhecido.';
+            const errorMessage = typeof errorData === 'string' ? errorData : errorData.erro || 'Login ou senha inválidos.';
             showMessage(msgElementId, errorMessage, 'red');
         }
     } catch (error) {
+        // Trata erros de conexão
+        console.error("Erro de fetch no login:", error);
         showMessage(msgElementId, 'Não foi possível conectar ao servidor. Tente novamente.', 'red');
     }
 }
+
+/**
+ * Lida com a submissão do formulário de cadastro.
+ */
 async function handleCadastro(event) {
     event.preventDefault(); // Impede o recarregamento da página
 
     const form = event.target;
-    const msgElementId = 'msg';
+    const msgElementId = 'msg'; // ID do elemento de mensagem no form
 
     // Validação simples no frontend
     if (form.senha.value !== form.confirma_senha.value) {
         showMessage(msgElementId, 'As senhas não conferem.', 'red');
+        return;
+    }
+    if (form.senha.value.length < 6) {
+        showMessage(msgElementId, 'A senha deve ter no mínimo 6 caracteres.', 'red');
         return;
     }
     if (!form.termos.checked) {
@@ -86,13 +107,13 @@ async function handleCadastro(event) {
 
         const data = await response.json();
 
-        if (response.ok) { // Status 201 Created
-            // Redireciona para a página de login com uma mensagem de sucesso
+        if (response.ok) {
             window.location.href = 'index.html?ok=Cadastro realizado com sucesso!';
-        } else { // Erro de validação (status 400)
+        } else {
             showMessage(msgElementId, data.erro || 'Ocorreu um erro no cadastro.', 'red');
         }
     } catch (error) {
+        console.error("Erro de fetch no cadastro:", error);
         showMessage(msgElementId, 'Não foi possível conectar ao servidor. Tente novamente.', 'red');
     }
 }

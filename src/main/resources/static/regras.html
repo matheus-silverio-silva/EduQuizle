@@ -2,30 +2,27 @@
 <html lang="pt-BR">
 <head>
     <script>
+        // Script de detecção de tema (light/dark mode)
         (function() {
             const themeKey = 'eduquizle_tema';
-            const themeValue = localStorage.getItem(themeKey) || 'system'; // Pega o tema salvo ou usa 'system' como padrão
+            const themeValue = localStorage.getItem(themeKey) || 'system';
             const root = document.documentElement;
-
-            root.classList.remove('light-mode', 'dark-mode'); // Limpa classes anteriores
-
+            root.classList.remove('light-mode', 'dark-mode');
             let themeToApply = themeValue;
             if (themeValue === 'system') {
                 const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
                 themeToApply = prefersDark ? 'dark' : 'light';
             }
-
             if (themeToApply === 'dark') {
                 root.classList.add('dark-mode');
             } else {
-                root.classList.add('light-mode'); // Ou não adicione se 'light' for o padrão sem classe
+                root.classList.add('light-mode');
             }
-            // Não precisa de console.log aqui para produção
         })();
     </script>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>EduQuizle — Regras do Jogo</title>
+    <title>EduQuizle — Como Jogar</title>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css"/>
@@ -53,86 +50,102 @@
         <h1 style="font-size: 28px;">Como funciona o <strong>EduQuizle</strong></h1>
 
         <section>
-            <h2>Objetivo</h2>
+            <h2>O Jogo</h2>
             <p>
-                Adivinhar o <strong>tema do dia</strong> usando pistas que aparecem a cada tentativa.
-                Os temas variam entre <strong>Geografia</strong>, <strong>Biologia</strong>,
-                <strong>História</strong> e <strong>Química</strong>. Quanto menos tentativas, maior a pontuação.
+                O EduQuizle é um jogo de adivinhação diário. Seu objetivo é descobrir a <strong>palavra-chave</strong> do dia em uma das quatro matérias:
+                <strong>Geografia</strong>, <strong>Biologia</strong>, <strong>História</strong> ou <strong>Química</strong>.
+            </p>
+            <p>
+                A cada palpite, o jogo informa o quão perto (ou longe) você está da resposta correta, usando um sistema de cores e setas.
             </p>
         </section>
 
         <section>
-            <h2>Como jogar</h2>
-            <ol>
-                <li>Digite sua hipótese no campo de resposta (não diferencia maiúsculas/minúsculas/acentos).</li>
-                <li>Envie e analise as pistas por atributo (exemplos abaixo); as cores indicam proximidade.</li>
-                <li>Ajuste o palpite e tente novamente até acertar ou acabar as tentativas.</li>
-            </ol>
-        </section>
-
-        <section>
-            <h2>O que significam as cores</h2>
-            <ul>
-                <li><strong>Verde</strong> — atributo correto.</li>
-                <li><strong>Amarelo</strong> — parcialmente correto (mesma categoria/valor próximo).</li>
-                <li><strong>Vermelho</strong> — incorreto.</li>
-                <li><strong>Vermelho escuro</strong> — muito distante da resposta.</li>
+            <h2>Entendendo as Pistas (Cores e Setas)</h2>
+            <p>Você tem 8 tentativas no Desafio Diário. Cada palpite revela novas pistas:</p>
+            <ul class="pistas-lista">
+                <li><span class="cor-verde"></span> <strong>Verde</strong>: Acerto perfeito! O atributo é exatamente esse.</li>
+                <li><span class="cor-amarela"></span> <strong>Amarelo</strong>: Acerto parcial. Você está "quase lá". Pode significar a mesma categoria, mas o item errado (ex: mesmo Continente, mas país errado).</li>
+                <li><span class="cor-vermelha"></span> <strong>Vermelho</strong>: Incorreto. O atributo do seu palpite não tem relação com a resposta.</li>
+                <li><span class="setas">⬆️⬇️</span> <strong>Setas (Maior / Menor)</strong>: Para pistas com números (como Ano, População ou N° Atômico), uma seta aparecerá.
+                    <ul>
+                        <li><strong>⬆️ (Maior)</strong>: A resposta correta tem um valor <strong>maior</strong> que o seu palpite.</li>
+                        <li><strong>⬇️ (Menor)</strong>: A resposta correta tem um valor <strong>menor</strong> que o seu palpite.</li>
+                    </ul>
+                </li>
             </ul>
         </section>
 
         <section>
-            <h2>Pistas por disciplina</h2>
+            <h2>As Pistas de Cada Matéria</h2>
+            <p>Estes são os atributos comparados em cada disciplina (e o que um acerto "Amarelo" significa):</p>
 
-            <h3>Geografia (ex.: País/Capital)</h3>
+            <h3>Geografia (Ex: Adivinhe o País)</h3>
             <ul>
-                <li>Continente, sub-região, capital, idioma principal, moeda, população (≈).</li>
-                <li>Parcial: mesmo continente/sub-região ou população próxima.</li>
+                <li><strong>Continente</strong> (Amarelo: Mesmo continente, país errado)</li>
+                <li><strong>Sub-Região</strong> (Amarelo: Mesma sub-região, país errado)</li>
+                <li><strong>Capital</strong></li>
+                <li><strong>Idioma Principal</strong></li>
+                <li><strong>Moeda</strong></li>
+                <li><strong>População</strong> (Pista numérica ⬆️⬇️)</li>
             </ul>
 
-            <h3>Biologia (ex.: Espécie/Grupo)</h3>
+            <h3>Biologia (Ex: Adivinhe a Espécie)</h3>
             <ul>
-                <li>Reino, filo/divisão, classe, habitat, alimentação, porte (≈).</li>
-                <li>Parcial: mesma classe ou mesmo habitat, espécie diferente</li>
+                <li><strong>Reino</strong> (Amarelo: Mesmo reino, espécie errada)</li>
+                <li><strong>Filo/Divisão</strong> (Amarelo: Mesmo filo, espécie errada)</li>
+                <li><strong>Classe</strong> (Amarelo: Mesma classe, espécie errada)</li>
+                <li><strong>Habitat</strong></li>
+                <li><strong>Alimentação</strong></li>
             </ul>
 
-            <h3>História (ex.: Evento/Personalidade)</h3>
+            <h3>História (Ex: Adivinhe o Evento ou Figura)</h3>
             <ul>
-                <li>Período/época, século, país/região, tema (revolução/tratado), protagonista.</li>
-                <li>Parcial: mesmo século ou mesmo país, evento/personagem distinto.</li>
+                <li><strong>Ano do Acontecimento</strong> (Pista numérica ⬆️⬇️)</li>
+                <li><strong>País/Região</strong> (Amarelo: Mesmo país, evento errado)</li>
+                <li><strong>Figura-Chave</strong></li>
+                <li><strong>Período/Época</strong> (Amarelo: Mesmo período, evento errado - ex: "Idade Média")</li>
+                <li><strong>Tema</strong> (Amarelo: Mesmo tema - ex: "Revolução")</li>
             </ul>
 
-            <h3>Química (ex.: Elemento)</h3>
+            <h3>Química (Ex: Adivinhe o Elemento)</h3>
             <ul>
-                <li>Símbolo, número atômico, grupo/período, família, estado físico (25 °C), massa atômica (≈).</li>
-                <li>Parcial: mesmo grupo/período; número atômico próximo.</li>
-            </ul>
-        </section>
-
-        <section>
-            <h2>Modos de jogo</h2>
-            <ul>
-                <li><strong>Desafio Diário</strong>: 1 desafio por dia, entra no ranking.</li>
-                <li><strong>Desafio Livre</strong>: jogue à vontade, não afeta o ranking.</li>
-            </ul>
-            <p><strong>Tentativas padrão</strong>: 8 no Diário e 10 no Livre (podem ser ajustadas pela organização).</p>
-        </section>
-
-        <section>
-            <h2>Pontuação e ranking</h2>
-            <ul>
-                <li>Acerto na 1ª tentativa: +100 pts (decaimento a cada tentativa).</li>
-                <li>Bônus por sequência diária de acertos.</li>
-                <li>Empates: menor tempo total decide.</li>
+                <li><strong>Símbolo</strong></li>
+                <li><strong>Número Atômico</strong> (Pista numérica ⬆️⬇️)</li>
+                <li><strong>Grupo</strong> (Amarelo: Mesmo grupo, elemento errado)</li>
+                <li><strong>Período</strong> (Amarelo: Mesmo período, elemento errado)</li>
+                <li><strong>Família</strong></li>
+                <li><strong>Estado Físico (a 25°C)</strong></li>
+                <li><strong>Massa Atômica</strong> (Pista numérica ⬆️⬇️)</li>
             </ul>
         </section>
 
         <section>
-            <h2>Boas práticas</h2>
+            <h2>Modos de Jogo</h2>
             <ul>
-                <li>Sem consulta ao gabarito diário.</li>
-                <li>Aceitamos variações comuns de escrita (com/sem acento).</li>
-                <li>Acessível por teclado e leitores de tela (labels descritivos nos campos).</li>
+                <li><strong>Desafio Diário</strong>: Um novo desafio por matéria, todos os dias. Suas pontuações aqui são salvas no Ranking oficial. Você tem <strong>8 tentativas</strong>.</li>
+                <li><strong>Desafio Livre</strong>: Jogue o quanto quiser com desafios aleatórios para praticar. Este modo não afeta o ranking. (Você tem 10 tentativas aqui).</li>
             </ul>
+        </section>
+
+        <section>
+            <h2>Pontuação e Ranking</h2>
+            <p>A pontuação é calculada apenas para o <strong>Desafio Diário</strong>. O cálculo é simples: quanto menos tentativas, mais pontos.</p>
+
+            <h3>Cálculo de Pontos (Desafio Diário)</h3>
+            <p>Você começa com uma pontuação máxima de <strong>150 pontos</strong> (100 pontos base + 50% de bônus por ser o desafio do dia). A cada tentativa errada, você perde 15 pontos.</p>
+            <ul class="pontuacao-lista">
+                <li>Acerto na <strong>1ª tentativa</strong>: 150 Pontos</li>
+                <li>Acerto na <strong>2ª tentativa</strong>: 135 Pontos</li>
+                <li>Acerto na <strong>3ª tentativa</strong>: 120 Pontos</li>
+                <li>Acerto na <strong>4ª tentativa</strong>: 105 Pontos</li>
+                <li>Acerto na <strong>5ª tentativa</strong>: 90 Pontos</li>
+                <li>Acerto na <strong>6ª tentativa</strong>: 75 Pontos</li>
+                <li>Acerto na <strong>7ª tentativa</strong>: 60 Pontos</li>
+                <li>Acerto na <strong>8ª tentativa</strong>: 45 Pontos</li>
+                <li><strong>Não acertou</strong>: 0 Pontos</li>
+            </ul>
+            <p>Os pontos são somados no Ranking Geral e também nos rankings específicos de cada matéria.</p>
         </section>
 
     </article>

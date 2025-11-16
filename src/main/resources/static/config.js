@@ -1,5 +1,6 @@
 const IDIOMA_KEY = 'eduquizle_idioma';
 const TEMA_KEY = 'eduquizle_tema';
+const LOGIN_KEY = 'eduquizle_user_login';
 
 const selectIdioma = document.getElementById('select-idioma');
 const themeRadios = document.querySelectorAll('input[name="theme"]');
@@ -102,13 +103,30 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () 
     }
 });
 
+// --- FUNÇÃO MODIFICADA ---
 async function loadUserProfile() {
     console.log("Carregando perfil do usuário...");
+
+    // 1. Pega o login do localStorage
+    const login = localStorage.getItem(LOGIN_KEY);
+
+    // 2. Se não estiver logado, redireciona
+    if (!login) {
+        console.error("Nenhum login encontrado no localStorage. Redirecionando para index.html");
+        window.location.href = 'index.html?erro=Sessão não encontrada. Faça login.';
+        return;
+    }
+
     try {
-        const response = await fetch('/api/usuarios/me');
+        // 3. Envia o login como query parameter
+        const response = await fetch(`/api/usuarios/me?login=${login}`);
 
         if (response.status === 401 || response.status === 403) {
             window.location.href = 'index.html?erro=Sessão expirada. Faça login novamente.';
+            return;
+        }
+        if (response.status === 404) {
+            window.location.href = 'index.html?erro=Usuário não encontrado. Faça login.';
             return;
         }
         if (!response.ok) {
@@ -117,6 +135,7 @@ async function loadUserProfile() {
 
         const user = await response.json();
 
+        // 4. Preenche os campos (inclusive o 'profile-login' que será usado para salvar)
         const loginInput = document.getElementById('profile-login');
         const nameInput = document.getElementById('profile-name');
         const emailInput = document.getElementById('profile-email');
@@ -126,7 +145,7 @@ async function loadUserProfile() {
         if (emailInput) emailInput.value = user.email || '';
 
     } catch (error) {
-        showMessage('profile-status', `Erro ao carregar dados do perfil. ${error.message}`, 'red', 0);
+        showMessage('profile-status', `Erro ao carregar dados do perfil: ${error.message}`, 'red', 0);
     }
 }
 
@@ -139,8 +158,15 @@ async function handleProfileUpdate(event) {
     const updatedData = {
         nome: form.nome.value.trim(),
         email: form.email.value.trim(),
+        // Pega o login do campo escondido (que foi preenchido no loadUserProfile)
         login: document.getElementById('profile-login').value
     };
+
+    // Validação simples
+    if (!updatedData.nome || !updatedData.email || !updatedData.login) {
+        showMessage(statusElementId, 'Nome e E-mail são obrigatórios.', 'red', 3000);
+        return;
+    }
 
     button.disabled = true;
     button.textContent = 'Salvando...';
@@ -157,6 +183,7 @@ async function handleProfileUpdate(event) {
 
         if (response.ok) {
             showMessage(statusElementId, 'profile_update_success', 'green');
+            // Atualiza o nome de usuário salvo (se você usar em outro lugar)
             localStorage.setItem('eduquizle_user', updatedData.nome);
         } else {
             let errorMsg = `Erro ${response.status}`;
@@ -185,15 +212,15 @@ async function handleChangePassword(event) {
     const confirmPassword = form.confirmacaoNovaSenha.value;
 
     if (!currentPassword || !newPassword || !confirmPassword) {
-        showMessage(statusElementId, 'password_error_all_fields', 'red', 0);
+        showMessage(statusElementId, 'password_error_all_fields', 'red', 3000);
         return;
     }
     if (newPassword !== confirmPassword) {
-        showMessage(statusElementId, 'password_error_mismatch', 'red', 0);
+        showMessage(statusElementId, 'password_error_mismatch', 'red', 3000);
         return;
     }
     if (newPassword.length < 6) {
-        showMessage(statusElementId, 'password_error_length', 'red', 0);
+        showMessage(statusElementId, 'password_error_length', 'red', 3000);
         return;
     }
 
@@ -201,6 +228,7 @@ async function handleChangePassword(event) {
         senhaAtual: currentPassword,
         novaSenha: newPassword,
         confirmacaoNovaSenha: confirmPassword,
+        // Pega o login do campo escondido
         login: document.getElementById('profile-login').value
     };
 
@@ -238,10 +266,7 @@ async function handleChangePassword(event) {
 
 document.addEventListener('DOMContentLoaded', () => {
     loadSettings();
-
-    setTimeout(() => {
-        loadUserProfile();
-    }, 100);
+    loadUserProfile();
 
     if (profileForm) {
         profileForm.addEventListener('submit', handleProfileUpdate);
@@ -252,5 +277,6 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log("Listeners de Tema, Idioma, Perfil e Senha configurados.");
 });
 
+// Carrega o tema inicial (redundante com o script inline no HTML, mas garante)
 const initialTheme = localStorage.getItem(TEMA_KEY) || 'system';
 applyTheme(initialTheme);

@@ -23,7 +23,7 @@ public class AgendadorDesafioService {
     @Autowired
     private DesafioDiarioService desafioDiarioService;
 
-    @Scheduled(cron = "0 00 10 * * ?")
+    @Scheduled(cron = "0 0 * * * ?")
     public void criarDesafiosDiariosAutomaticamente() {
         log.info("ROTINA AGENDADA: Iniciando verificação de desafios diários...");
 

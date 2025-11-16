@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.Map;
 
 @RestController
@@ -46,11 +45,33 @@ public class UsuarioController {
         Usuario usuario = usuarioService.autenticar(request.getLogin(), request.getSenha());
 
         if (usuario != null) {
-            return ResponseEntity.ok(usuario);
+            UsuarioProfileDTO profile = new UsuarioProfileDTO(usuario.getId(), usuario.getLogin(), usuario.getNome(), usuario.getEmail());
+            return ResponseEntity.ok(profile);
         } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Login ou senha inválidos.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("erro", "Login ou senha inválidos."));
         }
     }
+
+    // --- MÉTODO CORRIGIDO (para aceitar 'Usuario' em vez de 'Optional<Usuario>') ---
+    @GetMapping("/me")
+    public ResponseEntity<UsuarioProfileDTO> getMyProfile(@RequestParam String login) {
+        if (login == null || login.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+
+        // 1. Assumindo que seu service retorna 'Usuario' (ou 'null' se não encontrar)
+        Usuario usuario = usuarioService.buscarPorLogin(login);
+
+        // 2. Verificação de nulidade padrão
+        if (usuario != null) {
+            UsuarioProfileDTO profile = new UsuarioProfileDTO(usuario.getId(), usuario.getLogin(), usuario.getNome(), usuario.getEmail());
+            return ResponseEntity.ok(profile);
+        } else {
+            // Retorna 404 Not Found (Usuário não encontrado)
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
 
     @PutMapping("/me")
     public ResponseEntity<?> updateMyProfile(@Valid @RequestBody UpdateProfileDTO updateRequest) {
