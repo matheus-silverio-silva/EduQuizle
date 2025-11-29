@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +25,7 @@ import java.util.Optional;
 import java.util.function.Function;
 
 @Component
+@Profile({"dev", "test"})
 public class DataLoader implements CommandLineRunner {
 
     private static final Logger log = LoggerFactory.getLogger(DataLoader.class);
@@ -43,6 +45,7 @@ public class DataLoader implements CommandLineRunner {
     @Override
     @Transactional
     public void run(String... args) throws Exception {
+        log.info("--- INICIANDO DEV DATA LOADER (PERFIS ATIVOS: dev ou test) ---");
 
         // --- 1. CARREGAR DADOS DAS MATÉRIAS (CSVs) ---
         log.info("--- INICIANDO DATA LOADER (MATÉRIAS) ---");
@@ -56,7 +59,7 @@ public class DataLoader implements CommandLineRunner {
 
         // --- 3. POPULAR DESAFIOS DIÁRIOS ---
         log.info("--- INICIANDO DATA LOADER (DESAFIOS DIÁRIOS) ---");
-                popularDesafiosDiarios(LocalDate.now().minusDays(1)); // Ontem
+        popularDesafiosDiarios(LocalDate.now().minusDays(1)); // Ontem
         popularDesafiosDiarios(LocalDate.now()); // Hoje
         popularDesafiosDiarios(LocalDate.now().plusDays(1)); // Amanhã
         log.info("--- DATA LOADER (DESAFIOS DIÁRIOS) FINALIZADO ---");
@@ -150,10 +153,6 @@ public class DataLoader implements CommandLineRunner {
             e.printStackTrace();
         }
     }
-
-    /**
-     * Popula o banco com 20 usuários de teste e seus respectivos rankings.
-     */
     private void popularUsuariosEHighscores() {
         log.info("Verificando usuários e rankings de teste...");
 
@@ -181,11 +180,6 @@ public class DataLoader implements CommandLineRunner {
         criarUsuarioComRankingSeNaoExistir("curioso", "Isabela Neves", "isabela@email.com", "senha123", 40L, 10L, 10L, 10L, 10L);
         criarUsuarioComRankingSeNaoExistir("novato", "Carlos Silva", "carlos@email.com", "senha123", 0L, 0L, 0L, 0L, 0L);
     }
-
-    /**
-     * (VERSÃO CORRIGIDA) Método auxiliar para criar usuário e ranking
-     * Isso previne o erro 'detached entity'.
-     */
     private void criarUsuarioComRankingSeNaoExistir(String login, String nome, String email, String senha,
                                                     Long pTotal, Long pGeo, Long pHist, Long pBio, Long pQuim) {
 
