@@ -25,7 +25,6 @@ import java.util.Optional;
 import java.util.function.Function;
 
 @Component
-@Profile({"dev", "test"})
 public class DataLoader implements CommandLineRunner {
 
     private static final Logger log = LoggerFactory.getLogger(DataLoader.class);
