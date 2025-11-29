@@ -42,7 +42,6 @@ public class DataLoader implements CommandLineRunner {
     @Autowired private RespostaService respostaService;
 
     @Override
-    @Transactional
     public void run(String... args) throws Exception {
         log.info("--- INICIANDO DEV DATA LOADER (PERFIS ATIVOS: dev ou test) ---");
 
